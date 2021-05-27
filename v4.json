@@ -7243,6 +7243,18 @@
         ],
         "description": "MISSING CLASS DOCUMENTATION"
       }
+    },
+    "securitySchemes": {
+      "token": {
+        "type": "apiKey",
+        "name": "token",
+        "in": "header"
+      }
     }
-  }
+  },
+  "security": [
+    {
+      "token": []
+    }
+  ]
 }
