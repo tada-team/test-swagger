@@ -10,8 +10,65 @@
     }
   ],
   "paths": {
+    "/api/v4/addr": {
+      "get": {
+        "description": "Returns client address for debuging purposes.",
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "ok": {
+                      "type": "boolean"
+                    },
+                    "result": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {}
+        ]
+      }
+    },
+    "/api/v4/ping": {
+      "get": {
+        "description": "Ping the server.",
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "ok": {
+                      "type": "boolean"
+                    },
+                    "result": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {}
+        ]
+      }
+    },
     "/api/v4/teams": {
       "get": {
+        "description": "Get the list of teams on the server.",
         "responses": {
           "200": {
             "description": "",
@@ -49,6 +106,7 @@
         }
       ],
       "get": {
+        "description": "Get team info.",
         "responses": {
           "200": {
             "description": "",
@@ -71,6 +129,7 @@
         }
       },
       "put": {
+        "description": "Update team settings.\nMust have admin rights.",
         "responses": {
           "200": {
             "description": "",
@@ -102,6 +161,7 @@
         }
       },
       "delete": {
+        "description": "Delete the team.\nMust have admin rights.",
         "responses": {
           "200": {
             "description": "",
@@ -136,6 +196,7 @@
         }
       ],
       "get": {
+        "description": "Get the list of chats in the team.",
         "responses": {
           "200": {
             "description": "",
@@ -181,6 +242,7 @@
         }
       ],
       "get": {
+        "description": "Get the chat information.",
         "responses": {
           "200": {
             "description": "",
@@ -203,6 +265,7 @@
         }
       },
       "put": {
+        "description": "Change chat settings.",
         "responses": {
           "200": {
             "description": "",
@@ -253,7 +316,161 @@
           }
         }
       ],
+      "get": {
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "ok": {
+                      "type": "boolean"
+                    },
+                    "result": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/Message"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "chat",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "chat_type",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "sender",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "has_upload",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "text",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "type",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "important",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "date_from",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "date_to",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "include_deleted",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "gentime_from",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "exact",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "unread",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "old_from",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "new_from",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "old_from_inc",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "new_from_inc",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "around",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ]
+      },
       "post": {
+        "description": "Send text message to chat.",
         "responses": {
           "200": {
             "description": "",
@@ -311,6 +528,7 @@
         }
       ],
       "post": {
+        "description": "Edit message.",
         "responses": {
           "200": {
             "description": "",
@@ -342,6 +560,140 @@
         }
       },
       "delete": {
+        "description": "Delete message.",
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "ok": {
+                      "type": "boolean"
+                    },
+                    "result": {
+                      "$ref": "#/components/schemas/Message"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v4/teams/{team_id}/chats/{contact_id}/messages": {
+      "parameters": [
+        {
+          "name": "team_id",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "contact_id",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ],
+      "post": {
+        "description": "Send text message to direct chat.",
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "ok": {
+                      "type": "boolean"
+                    },
+                    "result": {}
+                  }
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Message"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v4/teams/{team_id}/chats/{contact_id}/messages/{message_id}": {
+      "parameters": [
+        {
+          "name": "team_id",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "contact_id",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "message_id",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ],
+      "post": {
+        "description": "Edit message in direct chat.",
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "ok": {
+                      "type": "boolean"
+                    },
+                    "result": {
+                      "$ref": "#/components/schemas/Message"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Message"
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "description": "Delete message in direct chat.",
         "responses": {
           "200": {
             "description": "",
@@ -376,6 +728,7 @@
         }
       ],
       "get": {
+        "description": "Get the list of contacts of the team.",
         "responses": {
           "200": {
             "description": "",
@@ -421,6 +774,7 @@
         }
       ],
       "get": {
+        "description": "Get contact details.",
         "responses": {
           "200": {
             "description": "",
@@ -442,7 +796,8 @@
           }
         }
       },
-      "put": {
+      "post": {
+        "description": "Update contact details.",
         "responses": {
           "200": {
             "description": "",
@@ -474,6 +829,7 @@
         }
       },
       "delete": {
+        "description": "Remove contact from the team.\nMust have admin rights.",
         "responses": {
           "200": {
             "description": "",
@@ -508,6 +864,7 @@
         }
       ],
       "get": {
+        "description": "Get all groups in the team.",
         "responses": {
           "200": {
             "description": "",
@@ -533,6 +890,7 @@
         }
       },
       "delete": {
+        "description": "Delete the group.",
         "responses": {
           "200": {
             "description": "",
@@ -573,6 +931,7 @@
         }
       ],
       "get": {
+        "description": "Get the list of group members.",
         "responses": {
           "200": {
             "description": "",
@@ -626,6 +985,7 @@
         }
       ],
       "delete": {
+        "description": "Remove member from the group.",
         "responses": {
           "200": {
             "description": "",
@@ -647,6 +1007,78 @@
           }
         }
       }
+    },
+    "/api/v4/teams/{team_id}/tasks": {
+      "parameters": [
+        {
+          "name": "team_id",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ],
+      "post": {
+        "description": "Create new task",
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "ok": {
+                      "type": "boolean"
+                    },
+                    "result": {
+                      "$ref": "#/components/schemas/Task"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Task"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/features.json": {
+      "get": {
+        "description": "Get the server features information.",
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "ok": {
+                      "type": "boolean"
+                    },
+                    "result": {
+                      "$ref": "#/components/schemas/Features"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {}
+        ]
+      }
     }
   },
   "components": {
@@ -655,82 +1087,66 @@
         "type": "object",
         "properties": {
           "call_seconds_total": {
-            "type": "integer",
-            "description": "DOCUMENTATION MISSING"
+            "type": "integer"
           },
           "calls_count": {
-            "type": "integer",
-            "description": "DOCUMENTATION MISSING"
+            "type": "integer"
           },
           "day": {
-            "type": "string",
-            "description": "DOCUMENTATION MISSING"
+            "type": "string"
           },
           "family_name": {
-            "type": "string",
-            "description": "DOCUMENTATION MISSING"
+            "type": "string"
           },
           "given_name": {
-            "type": "string",
-            "description": "DOCUMENTATION MISSING"
+            "type": "string"
           },
           "messages_count": {
-            "type": "integer",
-            "description": "DOCUMENTATION MISSING"
+            "type": "integer"
           },
           "patronymic": {
-            "type": "string",
-            "description": "DOCUMENTATION MISSING"
+            "type": "string"
           },
           "phone": {
-            "type": "string",
-            "description": "DOCUMENTATION MISSING"
+            "type": "string"
           },
           "user_id": {
-            "type": "integer",
-            "description": "DOCUMENTATION MISSING"
+            "type": "integer"
           }
         },
         "required": [
           "day",
           "user_id"
-        ],
-        "description": "MISSING CLASS DOCUMENTATION"
+        ]
       },
       "ActiveUserDailyStatList": {},
       "AnyEvent": {
         "type": "object",
         "properties": {
           "confirm_id": {
-            "type": "string",
-            "description": "DOCUMENTATION MISSING"
+            "type": "string"
           },
           "event": {
-            "type": "string",
-            "description": "DOCUMENTATION MISSING"
+            "type": "string"
           }
         },
         "required": [
           "event"
-        ],
-        "description": "MISSING CLASS DOCUMENTATION"
+        ]
       },
       "BaseEvent": {
         "type": "object",
         "properties": {
           "confirm_id": {
-            "type": "string",
-            "description": "DOCUMENTATION MISSING"
+            "type": "string"
           },
           "event": {
-            "type": "string",
-            "description": "DOCUMENTATION MISSING"
+            "type": "string"
           }
         },
         "required": [
           "event"
-        ],
-        "description": "MISSING CLASS DOCUMENTATION"
+        ]
       },
       "ButtonColors": {
         "type": "object",
@@ -795,10 +1211,28 @@
             "type": "boolean",
             "description": "Call record enabled"
           },
+          "buzz": {
+            "type": "boolean",
+            "description": "Call buzzing"
+          },
+          "created": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Creation date, iso datetime"
+          },
           "finish": {
             "type": "string",
             "format": "date-time",
             "description": "Call finish"
+          },
+          "gentime": {
+            "type": "integer",
+            "format": "int64",
+            "description": "Version"
+          },
+          "jid": {
+            "$ref": "#/components/schemas/JID",
+            "description": "Chat or contact id"
           },
           "onliners": {
             "$ref": "#/components/schemas/CallOnliner",
@@ -807,15 +1241,27 @@
           "start": {
             "type": "string",
             "format": "date-time",
-            "description": "Call start"
+            "description": "Call start. For direct calls can be empty when buzzing"
+          },
+          "timestamp": {
+            "type": "integer",
+            "format": "int64",
+            "description": "Deprecated: use gentime or created"
+          },
+          "uid": {
+            "type": "string",
+            "description": "Call id"
           }
         },
         "required": [
-          "start",
-          "finish",
-          "audiorecord"
+          "jid",
+          "uid",
+          "created",
+          "audiorecord",
+          "gentime",
+          "timestamp"
         ],
-        "description": "Audio call information"
+        "description": "Call information"
       },
       "CallOnliner": {
         "type": "object",
@@ -1165,34 +1611,27 @@
         "type": "object",
         "properties": {
           "chat_type": {
-            "$ref": "#/components/schemas/ChatType",
-            "description": "DOCUMENTATION MISSING"
+            "$ref": "#/components/schemas/ChatType"
           },
           "gentime": {
             "type": "integer",
-            "format": "int64",
-            "description": "DOCUMENTATION MISSING"
+            "format": "int64"
           },
           "jid": {
-            "$ref": "#/components/schemas/JID",
-            "description": "DOCUMENTATION MISSING"
+            "$ref": "#/components/schemas/JID"
           },
           "last_activity": {
             "type": "string",
-            "format": "date-time",
-            "description": "DOCUMENTATION MISSING"
+            "format": "date-time"
           },
           "last_read_message_id": {
-            "type": "string",
-            "description": "DOCUMENTATION MISSING"
+            "type": "string"
           },
           "num_unread": {
-            "type": "integer",
-            "description": "DOCUMENTATION MISSING"
+            "type": "integer"
           },
           "num_unread_notices": {
-            "type": "integer",
-            "description": "DOCUMENTATION MISSING"
+            "type": "integer"
           }
         },
         "required": [
@@ -1202,21 +1641,18 @@
           "num_unread",
           "num_unread_notices",
           "last_read_message_id"
-        ],
-        "description": "MISSING CLASS DOCUMENTATION"
+        ]
       },
       "ChatMessages": {
         "type": "object",
         "properties": {
           "messages": {
-            "$ref": "#/components/schemas/Message",
-            "description": "DOCUMENTATION MISSING"
+            "$ref": "#/components/schemas/Message"
           }
         },
         "required": [
           "messages"
-        ],
-        "description": "MISSING CLASS DOCUMENTATION"
+        ]
       },
       "ChatShort": {
         "type": "object",
@@ -1253,16 +1689,13 @@
         "type": "object",
         "properties": {
           "confirm_id": {
-            "type": "string",
-            "description": "DOCUMENTATION MISSING"
+            "type": "string"
           },
           "event": {
-            "type": "string",
-            "description": "DOCUMENTATION MISSING"
+            "type": "string"
           },
           "params": {
-            "$ref": "#/components/schemas/clientActivityParams",
-            "description": "DOCUMENTATION MISSING"
+            "$ref": "#/components/schemas/clientActivityParams"
           }
         },
         "required": [
@@ -1275,16 +1708,13 @@
         "type": "object",
         "properties": {
           "confirm_id": {
-            "type": "string",
-            "description": "DOCUMENTATION MISSING"
+            "type": "string"
           },
           "event": {
-            "type": "string",
-            "description": "DOCUMENTATION MISSING"
+            "type": "string"
           },
           "params": {
-            "$ref": "#/components/schemas/clientCallBuzzCancelParams",
-            "description": "DOCUMENTATION MISSING"
+            "$ref": "#/components/schemas/clientCallBuzzCancelParams"
           }
         },
         "required": [
@@ -1297,16 +1727,13 @@
         "type": "object",
         "properties": {
           "confirm_id": {
-            "type": "string",
-            "description": "DOCUMENTATION MISSING"
+            "type": "string"
           },
           "event": {
-            "type": "string",
-            "description": "DOCUMENTATION MISSING"
+            "type": "string"
           },
           "params": {
-            "$ref": "#/components/schemas/clientCallLeaveParams",
-            "description": "DOCUMENTATION MISSING"
+            "$ref": "#/components/schemas/clientCallLeaveParams"
           }
         },
         "required": [
@@ -1319,16 +1746,13 @@
         "type": "object",
         "properties": {
           "confirm_id": {
-            "type": "string",
-            "description": "DOCUMENTATION MISSING"
+            "type": "string"
           },
           "event": {
-            "type": "string",
-            "description": "DOCUMENTATION MISSING"
+            "type": "string"
           },
           "params": {
-            "$ref": "#/components/schemas/clientCallMuteAllParams",
-            "description": "DOCUMENTATION MISSING"
+            "$ref": "#/components/schemas/clientCallMuteAllParams"
           }
         },
         "required": [
@@ -1341,16 +1765,13 @@
         "type": "object",
         "properties": {
           "confirm_id": {
-            "type": "string",
-            "description": "DOCUMENTATION MISSING"
+            "type": "string"
           },
           "event": {
-            "type": "string",
-            "description": "DOCUMENTATION MISSING"
+            "type": "string"
           },
           "params": {
-            "$ref": "#/components/schemas/clientCallOfferParams",
-            "description": "DOCUMENTATION MISSING"
+            "$ref": "#/components/schemas/clientCallOfferParams"
           }
         },
         "required": [
@@ -1363,16 +1784,13 @@
         "type": "object",
         "properties": {
           "confirm_id": {
-            "type": "string",
-            "description": "DOCUMENTATION MISSING"
+            "type": "string"
           },
           "event": {
-            "type": "string",
-            "description": "DOCUMENTATION MISSING"
+            "type": "string"
           },
           "params": {
-            "$ref": "#/components/schemas/clientCallRejectParams",
-            "description": "DOCUMENTATION MISSING"
+            "$ref": "#/components/schemas/clientCallRejectParams"
           }
         },
         "required": [
@@ -1385,16 +1803,13 @@
         "type": "object",
         "properties": {
           "confirm_id": {
-            "type": "string",
-            "description": "DOCUMENTATION MISSING"
+            "type": "string"
           },
           "event": {
-            "type": "string",
-            "description": "DOCUMENTATION MISSING"
+            "type": "string"
           },
           "params": {
-            "$ref": "#/components/schemas/clientCallSoundParams",
-            "description": "DOCUMENTATION MISSING"
+            "$ref": "#/components/schemas/clientCallSoundParams"
           }
         },
         "required": [
@@ -1407,16 +1822,13 @@
         "type": "object",
         "properties": {
           "confirm_id": {
-            "type": "string",
-            "description": "DOCUMENTATION MISSING"
+            "type": "string"
           },
           "event": {
-            "type": "string",
-            "description": "DOCUMENTATION MISSING"
+            "type": "string"
           },
           "params": {
-            "$ref": "#/components/schemas/clientCallTrickleParams",
-            "description": "DOCUMENTATION MISSING"
+            "$ref": "#/components/schemas/clientCallTrickleParams"
           }
         },
         "required": [
@@ -1429,16 +1841,13 @@
         "type": "object",
         "properties": {
           "confirm_id": {
-            "type": "string",
-            "description": "DOCUMENTATION MISSING"
+            "type": "string"
           },
           "event": {
-            "type": "string",
-            "description": "DOCUMENTATION MISSING"
+            "type": "string"
           },
           "params": {
-            "$ref": "#/components/schemas/clientChatComposingParams",
-            "description": "DOCUMENTATION MISSING"
+            "$ref": "#/components/schemas/clientChatComposingParams"
           }
         },
         "required": [
@@ -1451,16 +1860,13 @@
         "type": "object",
         "properties": {
           "confirm_id": {
-            "type": "string",
-            "description": "DOCUMENTATION MISSING"
+            "type": "string"
           },
           "event": {
-            "type": "string",
-            "description": "DOCUMENTATION MISSING"
+            "type": "string"
           },
           "params": {
-            "$ref": "#/components/schemas/clientChatLastreadParams",
-            "description": "DOCUMENTATION MISSING"
+            "$ref": "#/components/schemas/clientChatLastreadParams"
           }
         },
         "required": [
@@ -1473,16 +1879,13 @@
         "type": "object",
         "properties": {
           "confirm_id": {
-            "type": "string",
-            "description": "DOCUMENTATION MISSING"
+            "type": "string"
           },
           "event": {
-            "type": "string",
-            "description": "DOCUMENTATION MISSING"
+            "type": "string"
           },
           "params": {
-            "$ref": "#/components/schemas/clientConfirmParams",
-            "description": "DOCUMENTATION MISSING"
+            "$ref": "#/components/schemas/clientConfirmParams"
           }
         },
         "required": [
@@ -1495,16 +1898,13 @@
         "type": "object",
         "properties": {
           "confirm_id": {
-            "type": "string",
-            "description": "DOCUMENTATION MISSING"
+            "type": "string"
           },
           "event": {
-            "type": "string",
-            "description": "DOCUMENTATION MISSING"
+            "type": "string"
           },
           "params": {
-            "$ref": "#/components/schemas/clientMessageDeletedParams",
-            "description": "DOCUMENTATION MISSING"
+            "$ref": "#/components/schemas/clientMessageDeletedParams"
           }
         },
         "required": [
@@ -1517,16 +1917,13 @@
         "type": "object",
         "properties": {
           "confirm_id": {
-            "type": "string",
-            "description": "DOCUMENTATION MISSING"
+            "type": "string"
           },
           "event": {
-            "type": "string",
-            "description": "DOCUMENTATION MISSING"
+            "type": "string"
           },
           "params": {
-            "$ref": "#/components/schemas/ClientMessageUpdatedParams",
-            "description": "DOCUMENTATION MISSING"
+            "$ref": "#/components/schemas/ClientMessageUpdatedParams"
           }
         },
         "required": [
@@ -1588,19 +1985,16 @@
         "required": [
           "to",
           "content"
-        ],
-        "description": "MISSING CLASS DOCUMENTATION"
+        ]
       },
       "ClientPing": {
         "type": "object",
         "properties": {
           "confirm_id": {
-            "type": "string",
-            "description": "DOCUMENTATION MISSING"
+            "type": "string"
           },
           "event": {
-            "type": "string",
-            "description": "DOCUMENTATION MISSING"
+            "type": "string"
           }
         },
         "required": [
@@ -1952,32 +2346,25 @@
         "type": "object",
         "properties": {
           "_error": {
-            "type": "string",
-            "description": "DOCUMENTATION MISSING"
+            "type": "string"
           },
           "family_name": {
-            "type": "string",
-            "description": "DOCUMENTATION MISSING"
+            "type": "string"
           },
           "given_name": {
-            "type": "string",
-            "description": "DOCUMENTATION MISSING"
+            "type": "string"
           },
           "patronymic": {
-            "type": "string",
-            "description": "DOCUMENTATION MISSING"
+            "type": "string"
           },
           "phone": {
-            "type": "string",
-            "description": "DOCUMENTATION MISSING"
+            "type": "string"
           },
           "role": {
-            "type": "string",
-            "description": "DOCUMENTATION MISSING"
+            "type": "string"
           },
           "section": {
-            "type": "string",
-            "description": "DOCUMENTATION MISSING"
+            "type": "string"
           }
         },
         "required": [
@@ -1986,8 +2373,7 @@
           "family_name",
           "role",
           "section"
-        ],
-        "description": "MISSING CLASS DOCUMENTATION"
+        ]
       },
       "ContactShort": {
         "type": "object",
@@ -2150,19 +2536,16 @@
         "type": "object",
         "properties": {
           "type": {
-            "type": "string",
-            "description": "DOCUMENTATION MISSING"
+            "type": "string"
           },
           "url": {
-            "type": "string",
-            "description": "DOCUMENTATION MISSING"
+            "type": "string"
           }
         },
         "required": [
           "type",
           "url"
-        ],
-        "description": "MISSING CLASS DOCUMENTATION"
+        ]
       },
       "Emoji": {
         "type": "object",
@@ -2197,6 +2580,10 @@
             "type": "string",
             "description": "Link to Google Play"
           },
+          "app_login_background": {
+            "type": "string",
+            "description": "AppBackground image url, if any"
+          },
           "app_schemes": {
             "type": "array",
             "items": {
@@ -2223,10 +2610,6 @@
           "auth_by_sms": {
             "type": "boolean",
             "description": "SMS authentication enabled"
-          },
-          "background": {
-            "type": "string",
-            "description": "Background image url, if any"
           },
           "build": {
             "type": "string",
@@ -2472,6 +2855,10 @@
             "type": "string",
             "description": "Static files server address"
           },
+          "web_login_background": {
+            "type": "string",
+            "description": "WebBackground image url, if any"
+          },
           "wiki_pages": {
             "type": "boolean",
             "description": "Wiki pages in chats. Experimental"
@@ -2589,24 +2976,20 @@
         "properties": {
           "created": {
             "type": "string",
-            "format": "date-time",
-            "description": "DOCUMENTATION MISSING"
+            "format": "date-time"
           },
           "subject": {
-            "$ref": "#/components/schemas/JID",
-            "description": "DOCUMENTATION MISSING"
+            "$ref": "#/components/schemas/JID"
           },
           "uid": {
-            "type": "string",
-            "description": "DOCUMENTATION MISSING"
+            "type": "string"
           }
         },
         "required": [
           "uid",
           "created",
           "subject"
-        ],
-        "description": "MISSING CLASS DOCUMENTATION"
+        ]
       },
       "GroupMembership": {
         "type": "object",
@@ -2739,8 +3122,7 @@
         "type": "object",
         "properties": {
           "-": {
-            "type": "string",
-            "description": "DOCUMENTATION MISSING"
+            "type": "string"
           },
           "comment": {
             "type": "string",
@@ -2883,20 +3265,16 @@
         "properties": {
           "created": {
             "type": "string",
-            "format": "date-time",
-            "description": "DOCUMENTATION MISSING"
+            "format": "date-time"
           },
           "qr": {
-            "type": "string",
-            "description": "DOCUMENTATION MISSING"
+            "type": "string"
           },
           "token": {
-            "type": "string",
-            "description": "DOCUMENTATION MISSING"
+            "type": "string"
           },
           "uid": {
-            "type": "string",
-            "description": "DOCUMENTATION MISSING"
+            "type": "string"
           }
         },
         "required": [
@@ -2904,8 +3282,7 @@
           "token",
           "created",
           "qr"
-        ],
-        "description": "MISSING CLASS DOCUMENTATION"
+        ]
       },
       "JID": {
         "type": "string"
@@ -2914,19 +3291,16 @@
         "type": "object",
         "properties": {
           "sdp": {
-            "type": "string",
-            "description": "DOCUMENTATION MISSING"
+            "type": "string"
           },
           "type": {
-            "type": "string",
-            "description": "DOCUMENTATION MISSING"
+            "type": "string"
           }
         },
         "required": [
           "sdp",
           "type"
-        ],
-        "description": "MISSING CLASS DOCUMENTATION"
+        ]
       },
       "MarkupEntity": {
         "type": "object",
@@ -3530,24 +3904,19 @@
         "type": "object",
         "properties": {
           "contacts": {
-            "$ref": "#/components/schemas/Contact",
-            "description": "DOCUMENTATION MISSING"
+            "$ref": "#/components/schemas/Contact"
           },
           "count": {
-            "type": "integer",
-            "description": "DOCUMENTATION MISSING"
+            "type": "integer"
           },
           "limit": {
-            "type": "integer",
-            "description": "DOCUMENTATION MISSING"
+            "type": "integer"
           },
           "objects": {
-            "$ref": "#/components/schemas/Chat",
-            "description": "DOCUMENTATION MISSING"
+            "$ref": "#/components/schemas/Chat"
           },
           "offset": {
-            "type": "integer",
-            "description": "DOCUMENTATION MISSING"
+            "type": "integer"
           }
         },
         "required": [
@@ -3555,27 +3924,22 @@
           "count",
           "limit",
           "offset"
-        ],
-        "description": "MISSING CLASS DOCUMENTATION"
+        ]
       },
       "PaginatedContacts": {
         "type": "object",
         "properties": {
           "count": {
-            "type": "integer",
-            "description": "DOCUMENTATION MISSING"
+            "type": "integer"
           },
           "limit": {
-            "type": "integer",
-            "description": "DOCUMENTATION MISSING"
+            "type": "integer"
           },
           "objects": {
-            "$ref": "#/components/schemas/Contact",
-            "description": "DOCUMENTATION MISSING"
+            "$ref": "#/components/schemas/Contact"
           },
           "offset": {
-            "type": "integer",
-            "description": "DOCUMENTATION MISSING"
+            "type": "integer"
           }
         },
         "required": [
@@ -3583,27 +3947,22 @@
           "count",
           "limit",
           "offset"
-        ],
-        "description": "MISSING CLASS DOCUMENTATION"
+        ]
       },
       "PaginatedMessages": {
         "type": "object",
         "properties": {
           "count": {
-            "type": "integer",
-            "description": "DOCUMENTATION MISSING"
+            "type": "integer"
           },
           "limit": {
-            "type": "integer",
-            "description": "DOCUMENTATION MISSING"
+            "type": "integer"
           },
           "objects": {
-            "$ref": "#/components/schemas/Message",
-            "description": "DOCUMENTATION MISSING"
+            "$ref": "#/components/schemas/Message"
           },
           "offset": {
-            "type": "integer",
-            "description": "DOCUMENTATION MISSING"
+            "type": "integer"
           }
         },
         "required": [
@@ -3611,27 +3970,22 @@
           "count",
           "limit",
           "offset"
-        ],
-        "description": "MISSING CLASS DOCUMENTATION"
+        ]
       },
       "PaginatedUploadShortMessages": {
         "type": "object",
         "properties": {
           "count": {
-            "type": "integer",
-            "description": "DOCUMENTATION MISSING"
+            "type": "integer"
           },
           "limit": {
-            "type": "integer",
-            "description": "DOCUMENTATION MISSING"
+            "type": "integer"
           },
           "objects": {
-            "$ref": "#/components/schemas/UploadShortMessage",
-            "description": "DOCUMENTATION MISSING"
+            "$ref": "#/components/schemas/UploadShortMessage"
           },
           "offset": {
-            "type": "integer",
-            "description": "DOCUMENTATION MISSING"
+            "type": "integer"
           }
         },
         "required": [
@@ -3639,8 +3993,7 @@
           "count",
           "limit",
           "offset"
-        ],
-        "description": "MISSING CLASS DOCUMENTATION"
+        ]
       },
       "PdfVersion": {
         "type": "object",
@@ -3663,36 +4016,28 @@
         "type": "object",
         "properties": {
           "allowed_notifications": {
-            "type": "boolean",
-            "description": "DOCUMENTATION MISSING"
+            "type": "boolean"
           },
           "data_badges": {
-            "type": "boolean",
-            "description": "DOCUMENTATION MISSING"
+            "type": "boolean"
           },
           "data_pushes": {
-            "type": "boolean",
-            "description": "DOCUMENTATION MISSING"
+            "type": "boolean"
           },
           "device_id": {
-            "type": "string",
-            "description": "DOCUMENTATION MISSING"
+            "type": "string"
           },
           "name": {
-            "type": "string",
-            "description": "DOCUMENTATION MISSING"
+            "type": "string"
           },
           "notification_token": {
-            "type": "string",
-            "description": "DOCUMENTATION MISSING"
+            "type": "string"
           },
           "type": {
-            "type": "string",
-            "description": "DOCUMENTATION MISSING"
+            "type": "string"
           },
           "voip_notification_token": {
-            "type": "string",
-            "description": "DOCUMENTATION MISSING"
+            "type": "string"
           }
         },
         "required": [
@@ -3704,8 +4049,7 @@
           "name",
           "data_pushes",
           "data_badges"
-        ],
-        "description": "MISSING CLASS DOCUMENTATION"
+        ]
       },
       "PushDeviceType": {
         "type": "integer"
@@ -3826,16 +4170,13 @@
         "type": "object",
         "properties": {
           "confirm_id": {
-            "type": "string",
-            "description": "DOCUMENTATION MISSING"
+            "type": "string"
           },
           "event": {
-            "type": "string",
-            "description": "DOCUMENTATION MISSING"
+            "type": "string"
           },
           "params": {
-            "$ref": "#/components/schemas/serverCallAnswerParams",
-            "description": "DOCUMENTATION MISSING"
+            "$ref": "#/components/schemas/serverCallAnswerParams"
           }
         },
         "required": [
@@ -3848,16 +4189,13 @@
         "type": "object",
         "properties": {
           "confirm_id": {
-            "type": "string",
-            "description": "DOCUMENTATION MISSING"
+            "type": "string"
           },
           "event": {
-            "type": "string",
-            "description": "DOCUMENTATION MISSING"
+            "type": "string"
           },
           "params": {
-            "$ref": "#/components/schemas/serverCallBuzzParams",
-            "description": "DOCUMENTATION MISSING"
+            "$ref": "#/components/schemas/serverCallBuzzParams"
           }
         },
         "required": [
@@ -3870,16 +4208,13 @@
         "type": "object",
         "properties": {
           "confirm_id": {
-            "type": "string",
-            "description": "DOCUMENTATION MISSING"
+            "type": "string"
           },
           "event": {
-            "type": "string",
-            "description": "DOCUMENTATION MISSING"
+            "type": "string"
           },
           "params": {
-            "$ref": "#/components/schemas/serverCallBuzzcancelParams",
-            "description": "DOCUMENTATION MISSING"
+            "$ref": "#/components/schemas/serverCallBuzzcancelParams"
           }
         },
         "required": [
@@ -3892,16 +4227,13 @@
         "type": "object",
         "properties": {
           "confirm_id": {
-            "type": "string",
-            "description": "DOCUMENTATION MISSING"
+            "type": "string"
           },
           "event": {
-            "type": "string",
-            "description": "DOCUMENTATION MISSING"
+            "type": "string"
           },
           "params": {
-            "$ref": "#/components/schemas/serverCallCheckFingerprintParams",
-            "description": "DOCUMENTATION MISSING"
+            "$ref": "#/components/schemas/serverCallCheckFingerprintParams"
           }
         },
         "required": [
@@ -3914,16 +4246,13 @@
         "type": "object",
         "properties": {
           "confirm_id": {
-            "type": "string",
-            "description": "DOCUMENTATION MISSING"
+            "type": "string"
           },
           "event": {
-            "type": "string",
-            "description": "DOCUMENTATION MISSING"
+            "type": "string"
           },
           "params": {
-            "$ref": "#/components/schemas/serverCallLeaveParams",
-            "description": "DOCUMENTATION MISSING"
+            "$ref": "#/components/schemas/serverCallLeaveParams"
           }
         },
         "required": [
@@ -3936,16 +4265,13 @@
         "type": "object",
         "properties": {
           "confirm_id": {
-            "type": "string",
-            "description": "DOCUMENTATION MISSING"
+            "type": "string"
           },
           "event": {
-            "type": "string",
-            "description": "DOCUMENTATION MISSING"
+            "type": "string"
           },
           "params": {
-            "$ref": "#/components/schemas/serverCallMuteallParams",
-            "description": "DOCUMENTATION MISSING"
+            "$ref": "#/components/schemas/serverCallMuteallParams"
           }
         },
         "required": [
@@ -3958,16 +4284,13 @@
         "type": "object",
         "properties": {
           "confirm_id": {
-            "type": "string",
-            "description": "DOCUMENTATION MISSING"
+            "type": "string"
           },
           "event": {
-            "type": "string",
-            "description": "DOCUMENTATION MISSING"
+            "type": "string"
           },
           "params": {
-            "$ref": "#/components/schemas/serverCallRejectParams",
-            "description": "DOCUMENTATION MISSING"
+            "$ref": "#/components/schemas/serverCallRejectParams"
           }
         },
         "required": [
@@ -3980,16 +4303,13 @@
         "type": "object",
         "properties": {
           "confirm_id": {
-            "type": "string",
-            "description": "DOCUMENTATION MISSING"
+            "type": "string"
           },
           "event": {
-            "type": "string",
-            "description": "DOCUMENTATION MISSING"
+            "type": "string"
           },
           "params": {
-            "$ref": "#/components/schemas/serverCallRestartParams",
-            "description": "DOCUMENTATION MISSING"
+            "$ref": "#/components/schemas/serverCallRestartParams"
           }
         },
         "required": [
@@ -4002,16 +4322,13 @@
         "type": "object",
         "properties": {
           "confirm_id": {
-            "type": "string",
-            "description": "DOCUMENTATION MISSING"
+            "type": "string"
           },
           "event": {
-            "type": "string",
-            "description": "DOCUMENTATION MISSING"
+            "type": "string"
           },
           "params": {
-            "$ref": "#/components/schemas/ServerCallSoundParams",
-            "description": "DOCUMENTATION MISSING"
+            "$ref": "#/components/schemas/ServerCallSoundParams"
           }
         },
         "required": [
@@ -4035,45 +4352,38 @@
         "required": [
           "jid",
           "muted"
-        ],
-        "description": "MISSING CLASS DOCUMENTATION"
+        ]
       },
       "ServerCallState": {
         "type": "object",
         "properties": {
           "confirm_id": {
-            "type": "string",
-            "description": "DOCUMENTATION MISSING"
+            "type": "string"
           },
           "event": {
-            "type": "string",
-            "description": "DOCUMENTATION MISSING"
+            "type": "string"
           },
           "params": {
-            "$ref": "#/components/schemas/serverCallStateParams",
-            "description": "DOCUMENTATION MISSING"
+            "$ref": "#/components/schemas/CallEvent"
           }
         },
         "required": [
           "params",
           "event"
         ],
-        "description": "Call participant number or parameters changed"
+        "description": "Call information"
       },
       "ServerCallTalking": {
         "type": "object",
         "properties": {
           "confirm_id": {
-            "type": "string",
-            "description": "DOCUMENTATION MISSING"
+            "type": "string"
           },
           "event": {
-            "type": "string",
-            "description": "DOCUMENTATION MISSING"
+            "type": "string"
           },
           "params": {
-            "$ref": "#/components/schemas/serverCallTalkingParams",
-            "description": "DOCUMENTATION MISSING"
+            "$ref": "#/components/schemas/serverCallTalkingParams"
           }
         },
         "required": [
@@ -4086,16 +4396,13 @@
         "type": "object",
         "properties": {
           "confirm_id": {
-            "type": "string",
-            "description": "DOCUMENTATION MISSING"
+            "type": "string"
           },
           "event": {
-            "type": "string",
-            "description": "DOCUMENTATION MISSING"
+            "type": "string"
           },
           "params": {
-            "$ref": "#/components/schemas/serverChatComposingParams",
-            "description": "DOCUMENTATION MISSING"
+            "$ref": "#/components/schemas/serverChatComposingParams"
           }
         },
         "required": [
@@ -4108,16 +4415,13 @@
         "type": "object",
         "properties": {
           "confirm_id": {
-            "type": "string",
-            "description": "DOCUMENTATION MISSING"
+            "type": "string"
           },
           "event": {
-            "type": "string",
-            "description": "DOCUMENTATION MISSING"
+            "type": "string"
           },
           "params": {
-            "$ref": "#/components/schemas/serverChatDeletedParams",
-            "description": "DOCUMENTATION MISSING"
+            "$ref": "#/components/schemas/serverChatDeletedParams"
           }
         },
         "required": [
@@ -4130,16 +4434,13 @@
         "type": "object",
         "properties": {
           "confirm_id": {
-            "type": "string",
-            "description": "DOCUMENTATION MISSING"
+            "type": "string"
           },
           "event": {
-            "type": "string",
-            "description": "DOCUMENTATION MISSING"
+            "type": "string"
           },
           "params": {
-            "$ref": "#/components/schemas/serverChatDraftParams",
-            "description": "DOCUMENTATION MISSING"
+            "$ref": "#/components/schemas/serverChatDraftParams"
           }
         },
         "required": [
@@ -4152,16 +4453,13 @@
         "type": "object",
         "properties": {
           "confirm_id": {
-            "type": "string",
-            "description": "DOCUMENTATION MISSING"
+            "type": "string"
           },
           "event": {
-            "type": "string",
-            "description": "DOCUMENTATION MISSING"
+            "type": "string"
           },
           "params": {
-            "$ref": "#/components/schemas/serverChatLastreadParams",
-            "description": "DOCUMENTATION MISSING"
+            "$ref": "#/components/schemas/serverChatLastreadParams"
           }
         },
         "required": [
@@ -4174,16 +4472,13 @@
         "type": "object",
         "properties": {
           "confirm_id": {
-            "type": "string",
-            "description": "DOCUMENTATION MISSING"
+            "type": "string"
           },
           "event": {
-            "type": "string",
-            "description": "DOCUMENTATION MISSING"
+            "type": "string"
           },
           "params": {
-            "$ref": "#/components/schemas/serverChatUpdatedParams",
-            "description": "DOCUMENTATION MISSING"
+            "$ref": "#/components/schemas/serverChatUpdatedParams"
           }
         },
         "required": [
@@ -4196,16 +4491,13 @@
         "type": "object",
         "properties": {
           "confirm_id": {
-            "type": "string",
-            "description": "DOCUMENTATION MISSING"
+            "type": "string"
           },
           "event": {
-            "type": "string",
-            "description": "DOCUMENTATION MISSING"
+            "type": "string"
           },
           "params": {
-            "$ref": "#/components/schemas/serverConfirmParams",
-            "description": "DOCUMENTATION MISSING"
+            "$ref": "#/components/schemas/serverConfirmParams"
           }
         },
         "required": [
@@ -4218,16 +4510,13 @@
         "type": "object",
         "properties": {
           "confirm_id": {
-            "type": "string",
-            "description": "DOCUMENTATION MISSING"
+            "type": "string"
           },
           "event": {
-            "type": "string",
-            "description": "DOCUMENTATION MISSING"
+            "type": "string"
           },
           "params": {
-            "$ref": "#/components/schemas/serverContactUpdatedParams",
-            "description": "DOCUMENTATION MISSING"
+            "$ref": "#/components/schemas/serverContactUpdatedParams"
           }
         },
         "required": [
@@ -4240,16 +4529,13 @@
         "type": "object",
         "properties": {
           "confirm_id": {
-            "type": "string",
-            "description": "DOCUMENTATION MISSING"
+            "type": "string"
           },
           "event": {
-            "type": "string",
-            "description": "DOCUMENTATION MISSING"
+            "type": "string"
           },
           "params": {
-            "$ref": "#/components/schemas/serverDebugParams",
-            "description": "DOCUMENTATION MISSING"
+            "$ref": "#/components/schemas/serverDebugParams"
           }
         },
         "required": [
@@ -4262,16 +4548,13 @@
         "type": "object",
         "properties": {
           "confirm_id": {
-            "type": "string",
-            "description": "DOCUMENTATION MISSING"
+            "type": "string"
           },
           "event": {
-            "type": "string",
-            "description": "DOCUMENTATION MISSING"
+            "type": "string"
           },
           "params": {
-            "$ref": "#/components/schemas/serverLoginParams",
-            "description": "DOCUMENTATION MISSING"
+            "$ref": "#/components/schemas/serverLoginParams"
           }
         },
         "required": [
@@ -4284,16 +4567,13 @@
         "type": "object",
         "properties": {
           "confirm_id": {
-            "type": "string",
-            "description": "DOCUMENTATION MISSING"
+            "type": "string"
           },
           "event": {
-            "type": "string",
-            "description": "DOCUMENTATION MISSING"
+            "type": "string"
           },
           "params": {
-            "$ref": "#/components/schemas/MessagePush",
-            "description": "DOCUMENTATION MISSING"
+            "$ref": "#/components/schemas/MessagePush"
           }
         },
         "required": [
@@ -4306,16 +4586,13 @@
         "type": "object",
         "properties": {
           "confirm_id": {
-            "type": "string",
-            "description": "DOCUMENTATION MISSING"
+            "type": "string"
           },
           "event": {
-            "type": "string",
-            "description": "DOCUMENTATION MISSING"
+            "type": "string"
           },
           "params": {
-            "$ref": "#/components/schemas/serverMessageReceivedParams",
-            "description": "DOCUMENTATION MISSING"
+            "$ref": "#/components/schemas/serverMessageReceivedParams"
           }
         },
         "required": [
@@ -4328,16 +4605,13 @@
         "type": "object",
         "properties": {
           "confirm_id": {
-            "type": "string",
-            "description": "DOCUMENTATION MISSING"
+            "type": "string"
           },
           "event": {
-            "type": "string",
-            "description": "DOCUMENTATION MISSING"
+            "type": "string"
           },
           "params": {
-            "$ref": "#/components/schemas/serverMessageUpdatedParams",
-            "description": "DOCUMENTATION MISSING"
+            "$ref": "#/components/schemas/serverMessageUpdatedParams"
           }
         },
         "required": [
@@ -4350,16 +4624,13 @@
         "type": "object",
         "properties": {
           "confirm_id": {
-            "type": "string",
-            "description": "DOCUMENTATION MISSING"
+            "type": "string"
           },
           "event": {
-            "type": "string",
-            "description": "DOCUMENTATION MISSING"
+            "type": "string"
           },
           "params": {
-            "$ref": "#/components/schemas/serverOnlineParams",
-            "description": "DOCUMENTATION MISSING"
+            "$ref": "#/components/schemas/serverOnlineParams"
           }
         },
         "required": [
@@ -4372,16 +4643,13 @@
         "type": "object",
         "properties": {
           "confirm_id": {
-            "type": "string",
-            "description": "DOCUMENTATION MISSING"
+            "type": "string"
           },
           "event": {
-            "type": "string",
-            "description": "DOCUMENTATION MISSING"
+            "type": "string"
           },
           "params": {
-            "$ref": "#/components/schemas/serverPanicParams",
-            "description": "DOCUMENTATION MISSING"
+            "$ref": "#/components/schemas/serverPanicParams"
           }
         },
         "required": [
@@ -4394,16 +4662,13 @@
         "type": "object",
         "properties": {
           "confirm_id": {
-            "type": "string",
-            "description": "DOCUMENTATION MISSING"
+            "type": "string"
           },
           "event": {
-            "type": "string",
-            "description": "DOCUMENTATION MISSING"
+            "type": "string"
           },
           "params": {
-            "$ref": "#/components/schemas/serverProcessingParams",
-            "description": "DOCUMENTATION MISSING"
+            "$ref": "#/components/schemas/serverProcessingParams"
           }
         },
         "required": [
@@ -4416,16 +4681,13 @@
         "type": "object",
         "properties": {
           "confirm_id": {
-            "type": "string",
-            "description": "DOCUMENTATION MISSING"
+            "type": "string"
           },
           "event": {
-            "type": "string",
-            "description": "DOCUMENTATION MISSING"
+            "type": "string"
           },
           "params": {
-            "$ref": "#/components/schemas/serverRemindDeletedParams",
-            "description": "DOCUMENTATION MISSING"
+            "$ref": "#/components/schemas/serverRemindDeletedParams"
           }
         },
         "required": [
@@ -4438,16 +4700,13 @@
         "type": "object",
         "properties": {
           "confirm_id": {
-            "type": "string",
-            "description": "DOCUMENTATION MISSING"
+            "type": "string"
           },
           "event": {
-            "type": "string",
-            "description": "DOCUMENTATION MISSING"
+            "type": "string"
           },
           "params": {
-            "$ref": "#/components/schemas/serverRemindFiredParams",
-            "description": "DOCUMENTATION MISSING"
+            "$ref": "#/components/schemas/serverRemindFiredParams"
           }
         },
         "required": [
@@ -4460,16 +4719,13 @@
         "type": "object",
         "properties": {
           "confirm_id": {
-            "type": "string",
-            "description": "DOCUMENTATION MISSING"
+            "type": "string"
           },
           "event": {
-            "type": "string",
-            "description": "DOCUMENTATION MISSING"
+            "type": "string"
           },
           "params": {
-            "$ref": "#/components/schemas/serverRemindUpdatedParams",
-            "description": "DOCUMENTATION MISSING"
+            "$ref": "#/components/schemas/serverRemindUpdatedParams"
           }
         },
         "required": [
@@ -4482,16 +4738,13 @@
         "type": "object",
         "properties": {
           "confirm_id": {
-            "type": "string",
-            "description": "DOCUMENTATION MISSING"
+            "type": "string"
           },
           "event": {
-            "type": "string",
-            "description": "DOCUMENTATION MISSING"
+            "type": "string"
           },
           "params": {
-            "$ref": "#/components/schemas/serverSectionDeletedParams",
-            "description": "DOCUMENTATION MISSING"
+            "$ref": "#/components/schemas/serverSectionDeletedParams"
           }
         },
         "required": [
@@ -4504,16 +4757,13 @@
         "type": "object",
         "properties": {
           "confirm_id": {
-            "type": "string",
-            "description": "DOCUMENTATION MISSING"
+            "type": "string"
           },
           "event": {
-            "type": "string",
-            "description": "DOCUMENTATION MISSING"
+            "type": "string"
           },
           "params": {
-            "$ref": "#/components/schemas/serverSectionUpdatedParams",
-            "description": "DOCUMENTATION MISSING"
+            "$ref": "#/components/schemas/serverSectionUpdatedParams"
           }
         },
         "required": [
@@ -4526,16 +4776,13 @@
         "type": "object",
         "properties": {
           "confirm_id": {
-            "type": "string",
-            "description": "DOCUMENTATION MISSING"
+            "type": "string"
           },
           "event": {
-            "type": "string",
-            "description": "DOCUMENTATION MISSING"
+            "type": "string"
           },
           "params": {
-            "$ref": "#/components/schemas/serverTagDeletedParams",
-            "description": "DOCUMENTATION MISSING"
+            "$ref": "#/components/schemas/serverTagDeletedParams"
           }
         },
         "required": [
@@ -4548,16 +4795,13 @@
         "type": "object",
         "properties": {
           "confirm_id": {
-            "type": "string",
-            "description": "DOCUMENTATION MISSING"
+            "type": "string"
           },
           "event": {
-            "type": "string",
-            "description": "DOCUMENTATION MISSING"
+            "type": "string"
           },
           "params": {
-            "$ref": "#/components/schemas/serverTagUpdatedParams",
-            "description": "DOCUMENTATION MISSING"
+            "$ref": "#/components/schemas/serverTagUpdatedParams"
           }
         },
         "required": [
@@ -4570,16 +4814,13 @@
         "type": "object",
         "properties": {
           "confirm_id": {
-            "type": "string",
-            "description": "DOCUMENTATION MISSING"
+            "type": "string"
           },
           "event": {
-            "type": "string",
-            "description": "DOCUMENTATION MISSING"
+            "type": "string"
           },
           "params": {
-            "$ref": "#/components/schemas/serverTeamCountersParams",
-            "description": "DOCUMENTATION MISSING"
+            "$ref": "#/components/schemas/serverTeamCountersParams"
           }
         },
         "required": [
@@ -4592,16 +4833,13 @@
         "type": "object",
         "properties": {
           "confirm_id": {
-            "type": "string",
-            "description": "DOCUMENTATION MISSING"
+            "type": "string"
           },
           "event": {
-            "type": "string",
-            "description": "DOCUMENTATION MISSING"
+            "type": "string"
           },
           "params": {
-            "$ref": "#/components/schemas/serverTeamDeletedParams",
-            "description": "DOCUMENTATION MISSING"
+            "$ref": "#/components/schemas/serverTeamDeletedParams"
           }
         },
         "required": [
@@ -4614,16 +4852,13 @@
         "type": "object",
         "properties": {
           "confirm_id": {
-            "type": "string",
-            "description": "DOCUMENTATION MISSING"
+            "type": "string"
           },
           "event": {
-            "type": "string",
-            "description": "DOCUMENTATION MISSING"
+            "type": "string"
           },
           "params": {
-            "$ref": "#/components/schemas/serverTeamUpdatedParams",
-            "description": "DOCUMENTATION MISSING"
+            "$ref": "#/components/schemas/serverTeamUpdatedParams"
           }
         },
         "required": [
@@ -4636,16 +4871,13 @@
         "type": "object",
         "properties": {
           "confirm_id": {
-            "type": "string",
-            "description": "DOCUMENTATION MISSING"
+            "type": "string"
           },
           "event": {
-            "type": "string",
-            "description": "DOCUMENTATION MISSING"
+            "type": "string"
           },
           "params": {
-            "$ref": "#/components/schemas/serverTimeParams",
-            "description": "DOCUMENTATION MISSING"
+            "$ref": "#/components/schemas/serverTimeParams"
           }
         },
         "required": [
@@ -4658,16 +4890,13 @@
         "type": "object",
         "properties": {
           "confirm_id": {
-            "type": "string",
-            "description": "DOCUMENTATION MISSING"
+            "type": "string"
           },
           "event": {
-            "type": "string",
-            "description": "DOCUMENTATION MISSING"
+            "type": "string"
           },
           "params": {
-            "$ref": "#/components/schemas/UiSettings",
-            "description": "DOCUMENTATION MISSING"
+            "$ref": "#/components/schemas/UiSettings"
           }
         },
         "required": [
@@ -4680,16 +4909,13 @@
         "type": "object",
         "properties": {
           "confirm_id": {
-            "type": "string",
-            "description": "DOCUMENTATION MISSING"
+            "type": "string"
           },
           "event": {
-            "type": "string",
-            "description": "DOCUMENTATION MISSING"
+            "type": "string"
           },
           "params": {
-            "$ref": "#/components/schemas/serverUploadUpdatedParams",
-            "description": "DOCUMENTATION MISSING"
+            "$ref": "#/components/schemas/serverUploadUpdatedParams"
           }
         },
         "required": [
@@ -4702,16 +4928,13 @@
         "type": "object",
         "properties": {
           "confirm_id": {
-            "type": "string",
-            "description": "DOCUMENTATION MISSING"
+            "type": "string"
           },
           "event": {
-            "type": "string",
-            "description": "DOCUMENTATION MISSING"
+            "type": "string"
           },
           "params": {
-            "$ref": "#/components/schemas/serverWarningParams",
-            "description": "DOCUMENTATION MISSING"
+            "$ref": "#/components/schemas/serverWarningParams"
           }
         },
         "required": [
@@ -4845,28 +5068,22 @@
         "type": "object",
         "properties": {
           "icon100": {
-            "type": "string",
-            "description": "DOCUMENTATION MISSING"
+            "type": "string"
           },
           "icon128": {
-            "type": "string",
-            "description": "DOCUMENTATION MISSING"
+            "type": "string"
           },
           "icon200": {
-            "type": "string",
-            "description": "DOCUMENTATION MISSING"
+            "type": "string"
           },
           "icon64": {
-            "type": "string",
-            "description": "DOCUMENTATION MISSING"
+            "type": "string"
           },
           "message_content": {
-            "$ref": "#/components/schemas/MessageContent",
-            "description": "DOCUMENTATION MISSING"
+            "$ref": "#/components/schemas/MessageContent"
           },
           "uid": {
-            "type": "string",
-            "description": "DOCUMENTATION MISSING"
+            "type": "string"
           }
         },
         "required": [
@@ -4876,35 +5093,28 @@
           "icon128",
           "icon200",
           "message_content"
-        ],
-        "description": "MISSING CLASS DOCUMENTATION"
+        ]
       },
       "Stickerpack": {
         "type": "object",
         "properties": {
           "author": {
-            "type": "string",
-            "description": "DOCUMENTATION MISSING"
+            "type": "string"
           },
           "author_link": {
-            "type": "string",
-            "description": "DOCUMENTATION MISSING"
+            "type": "string"
           },
           "name": {
-            "type": "string",
-            "description": "DOCUMENTATION MISSING"
+            "type": "string"
           },
           "stickers": {
-            "$ref": "#/components/schemas/Sticker",
-            "description": "DOCUMENTATION MISSING"
+            "$ref": "#/components/schemas/Sticker"
           },
           "title": {
-            "type": "string",
-            "description": "DOCUMENTATION MISSING"
+            "type": "string"
           },
           "uid": {
-            "type": "string",
-            "description": "DOCUMENTATION MISSING"
+            "type": "string"
           }
         },
         "required": [
@@ -4912,8 +5122,7 @@
           "name",
           "title",
           "stickers"
-        ],
-        "description": "MISSING CLASS DOCUMENTATION"
+        ]
       },
       "Subtask": {
         "type": "object",
@@ -4987,6 +5196,92 @@
           "name"
         ],
         "description": "Task tag"
+      },
+      "Task": {
+        "type": "object",
+        "properties": {
+          "assignee": {
+            "$ref": "#/components/schemas/JID",
+            "description": "User who was assigned the task"
+          },
+          "complexity": {
+            "type": "integer",
+            "description": "Task complexity"
+          },
+          "custom_color_index": {
+            "type": "integer",
+            "description": "Custom task color"
+          },
+          "deadline": {
+            "type": "string",
+            "description": "Deadline time"
+          },
+          "description": {
+            "type": "string",
+            "description": "Task description"
+          },
+          "importance": {
+            "type": "integer",
+            "description": "Task importance"
+          },
+          "items": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Items of the task"
+          },
+          "linked_messages": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Linked messages"
+          },
+          "observers": {
+            "$ref": "#/components/schemas/JID",
+            "description": "User who follow the task"
+          },
+          "public": {
+            "type": "boolean",
+            "description": "Is task public"
+          },
+          "remind_at": {
+            "type": "string",
+            "description": "Fire a reminder at this time"
+          },
+          "section": {
+            "type": "string",
+            "description": "Task section UID"
+          },
+          "spent_time": {
+            "type": "integer",
+            "description": "Time spent"
+          },
+          "tags": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Task tags"
+          },
+          "task_status": {
+            "type": "string",
+            "description": "Task status"
+          },
+          "uploads": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Task uploads"
+          },
+          "urgency": {
+            "type": "integer",
+            "description": "Task urgency"
+          }
+        },
+        "description": "Task"
       },
       "TaskColor": {
         "type": "object",
@@ -5090,57 +5385,46 @@
         "type": "object",
         "properties": {
           "checked": {
-            "type": "boolean",
-            "description": "DOCUMENTATION MISSING"
+            "type": "boolean"
           },
           "name": {
-            "type": "string",
-            "description": "DOCUMENTATION MISSING"
+            "type": "string"
           }
         },
         "required": [
           "name",
           "checked"
-        ],
-        "description": "MISSING CLASS DOCUMENTATION"
+        ]
       },
       "TaskPreview": {
         "type": "object",
         "properties": {
           "_error": {
-            "type": "string",
-            "description": "DOCUMENTATION MISSING"
+            "type": "string"
           },
           "assignee": {
-            "$ref": "#/components/schemas/JID",
-            "description": "DOCUMENTATION MISSING"
+            "$ref": "#/components/schemas/JID"
           },
           "deadline": {
-            "type": "string",
-            "description": "DOCUMENTATION MISSING"
+            "type": "string"
           },
           "description": {
-            "type": "string",
-            "description": "DOCUMENTATION MISSING"
+            "type": "string"
           },
           "items": {
-            "$ref": "#/components/schemas/TaskItems",
-            "description": "DOCUMENTATION MISSING"
+            "$ref": "#/components/schemas/TaskItems"
           },
           "public": {
-            "type": "boolean",
-            "description": "DOCUMENTATION MISSING"
+            "type": "boolean"
           },
           "section": {
-            "type": "string",
-            "description": "DOCUMENTATION MISSING"
+            "type": "string"
           },
           "tags": {
             "type": "array",
             "items": {
               "type": "string"
-            },
-            "description": "DOCUMENTATION MISSING"
+            }
           }
         },
         "required": [
@@ -5151,8 +5435,7 @@
           "public",
           "tags",
           "items"
-        ],
-        "description": "MISSING CLASS DOCUMENTATION"
+        ]
       },
       "TaskSort": {
         "type": "object",
@@ -6040,8 +6323,7 @@
         "type": "object",
         "properties": {
           "_age": {
-            "type": "integer",
-            "description": "DOCUMENTATION MISSING"
+            "type": "integer"
           },
           "addr": {
             "type": "string",
@@ -6052,8 +6334,7 @@
             "description": "name of country"
           },
           "created": {
-            "type": "string",
-            "description": "DOCUMENTATION MISSING"
+            "type": "string"
           },
           "device": {
             "$ref": "#/components/schemas/PushDevice",
@@ -6064,16 +6345,14 @@
             "description": "type of auth"
           },
           "last_access": {
-            "type": "string",
-            "description": "DOCUMENTATION MISSING"
+            "type": "string"
           },
           "region": {
             "type": "string",
             "description": "name of region"
           },
           "uid": {
-            "type": "string",
-            "description": "DOCUMENTATION MISSING"
+            "type": "string"
           },
           "user_agent": {
             "type": "string",
@@ -6084,8 +6363,7 @@
           "created",
           "uid",
           "kind"
-        ],
-        "description": "MISSING CLASS DOCUMENTATION"
+        ]
       },
       "UserWithMe": {
         "type": "object",
@@ -6236,8 +6514,7 @@
         },
         "required": [
           "afk"
-        ],
-        "description": "MISSING CLASS DOCUMENTATION"
+        ]
       },
       "clientCallBuzzCancelParams": {
         "type": "object",
@@ -6249,8 +6526,7 @@
         },
         "required": [
           "jid"
-        ],
-        "description": "MISSING CLASS DOCUMENTATION"
+        ]
       },
       "clientCallBuzzParams": {
         "type": "object",
@@ -6261,12 +6537,11 @@
           },
           "members": {
             "$ref": "#/components/schemas/JID",
-            "description": "List of call participants"
+            "description": "List of call participants. Empty value means all participants in call"
           }
         },
         "required": [
-          "jid",
-          "members"
+          "jid"
         ],
         "description": "Call buzzing"
       },
@@ -6283,10 +6558,8 @@
           }
         },
         "required": [
-          "jid",
-          "reason"
-        ],
-        "description": "MISSING CLASS DOCUMENTATION"
+          "jid"
+        ]
       },
       "clientCallMuteAllParams": {
         "type": "object",
@@ -6298,8 +6571,7 @@
         },
         "required": [
           "jid"
-        ],
-        "description": "MISSING CLASS DOCUMENTATION"
+        ]
       },
       "clientCallOfferParams": {
         "type": "object",
@@ -6326,8 +6598,7 @@
           "muted",
           "trickle",
           "sdp"
-        ],
-        "description": "MISSING CLASS DOCUMENTATION"
+        ]
       },
       "clientCallRejectParams": {
         "type": "object",
@@ -6342,10 +6613,8 @@
           }
         },
         "required": [
-          "jid",
-          "reason"
-        ],
-        "description": "MISSING CLASS DOCUMENTATION"
+          "jid"
+        ]
       },
       "clientCallSoundParams": {
         "type": "object",
@@ -6362,8 +6631,7 @@
         "required": [
           "jid",
           "muted"
-        ],
-        "description": "MISSING CLASS DOCUMENTATION"
+        ]
       },
       "clientCallTrickleParams": {
         "type": "object",
@@ -6387,11 +6655,8 @@
         },
         "required": [
           "jid",
-          "candidate",
-          "sdp_mid",
-          "sdp_mline_index"
-        ],
-        "description": "MISSING CLASS DOCUMENTATION"
+          "candidate"
+        ]
       },
       "clientChatComposingParams": {
         "type": "object",
@@ -6415,8 +6680,7 @@
         },
         "required": [
           "jid"
-        ],
-        "description": "MISSING CLASS DOCUMENTATION"
+        ]
       },
       "clientChatLastreadParams": {
         "type": "object",
@@ -6432,8 +6696,7 @@
         },
         "required": [
           "jid"
-        ],
-        "description": "MISSING CLASS DOCUMENTATION"
+        ]
       },
       "clientConfirmParams": {
         "type": "object",
@@ -6445,8 +6708,7 @@
         },
         "required": [
           "confirm_id"
-        ],
-        "description": "MISSING CLASS DOCUMENTATION"
+        ]
       },
       "clientMessageDeletedParams": {
         "type": "object",
@@ -6455,26 +6717,22 @@
             "type": "string",
             "description": "Message id"
           }
-        },
-        "description": "MISSING CLASS DOCUMENTATION"
+        }
       },
       "serverCallAnswerCandidate": {
         "type": "object",
         "properties": {
           "candidate": {
-            "type": "string",
-            "description": "DOCUMENTATION MISSING"
+            "type": "string"
           },
           "sdpMLineIndex": {
-            "type": "integer",
-            "description": "DOCUMENTATION MISSING"
+            "type": "integer"
           }
         },
         "required": [
           "candidate",
           "sdpMLineIndex"
-        ],
-        "description": "MISSING CLASS DOCUMENTATION"
+        ]
       },
       "serverCallAnswerParams": {
         "type": "object",
@@ -6502,11 +6760,9 @@
         },
         "required": [
           "jid",
-          "candidates",
           "jsep",
           "uid"
-        ],
-        "description": "MISSING CLASS DOCUMENTATION"
+        ]
       },
       "serverCallBuzzParams": {
         "type": "object",
@@ -6558,8 +6814,7 @@
           "uid",
           "buzz_timeout",
           "team"
-        ],
-        "description": "MISSING CLASS DOCUMENTATION"
+        ]
       },
       "serverCallBuzzcancelParams": {
         "type": "object",
@@ -6581,21 +6836,18 @@
           "jid",
           "team",
           "uid"
-        ],
-        "description": "MISSING CLASS DOCUMENTATION"
+        ]
       },
       "serverCallCheckFingerprintParams": {
         "type": "object",
         "properties": {
           "fingerprint": {
-            "type": "string",
-            "description": "DOCUMENTATION MISSING"
+            "type": "string"
           }
         },
         "required": [
           "fingerprint"
-        ],
-        "description": "MISSING CLASS DOCUMENTATION"
+        ]
       },
       "serverCallLeaveParams": {
         "type": "object",
@@ -6612,8 +6864,7 @@
         "required": [
           "jid",
           "uid"
-        ],
-        "description": "MISSING CLASS DOCUMENTATION"
+        ]
       },
       "serverCallMuteallParams": {
         "type": "object",
@@ -6630,8 +6881,7 @@
         "required": [
           "jid",
           "muted"
-        ],
-        "description": "MISSING CLASS DOCUMENTATION"
+        ]
       },
       "serverCallRejectParams": {
         "type": "object",
@@ -6653,8 +6903,7 @@
           "jid",
           "uid",
           "reason"
-        ],
-        "description": "MISSING CLASS DOCUMENTATION"
+        ]
       },
       "serverCallRestartParams": {
         "type": "object",
@@ -6676,57 +6925,7 @@
           "jid",
           "uid",
           "team"
-        ],
-        "description": "MISSING CLASS DOCUMENTATION"
-      },
-      "serverCallStateParams": {
-        "type": "object",
-        "properties": {
-          "audiorecord": {
-            "type": "boolean",
-            "description": "Call record enabled"
-          },
-          "buzz": {
-            "type": "boolean",
-            "description": "Call buzzing"
-          },
-          "finish": {
-            "type": "string",
-            "format": "date-time",
-            "description": "Call finish, if any"
-          },
-          "jid": {
-            "$ref": "#/components/schemas/JID",
-            "description": "Chat or contact id"
-          },
-          "onliners": {
-            "$ref": "#/components/schemas/CallOnliner",
-            "description": "Call participants"
-          },
-          "start": {
-            "type": "string",
-            "format": "date-time",
-            "description": "Call start, if any"
-          },
-          "timestamp": {
-            "type": "integer",
-            "format": "int64",
-            "description": "Event start. FIXME: why not gentime?"
-          },
-          "uid": {
-            "type": "string",
-            "description": "Call id"
-          }
-        },
-        "required": [
-          "jid",
-          "uid",
-          "start",
-          "finish",
-          "audiorecord",
-          "timestamp"
-        ],
-        "description": "MISSING CLASS DOCUMENTATION"
+        ]
       },
       "serverCallTalkingParams": {
         "type": "object",
@@ -6748,8 +6947,7 @@
           "jid",
           "actor",
           "talking"
-        ],
-        "description": "MISSING CLASS DOCUMENTATION"
+        ]
       },
       "serverChatComposingParams": {
         "type": "object",
@@ -6780,8 +6978,7 @@
           "jid",
           "actor",
           "composing"
-        ],
-        "description": "MISSING CLASS DOCUMENTATION"
+        ]
       },
       "serverChatDeletedParams": {
         "type": "object",
@@ -6803,8 +7000,7 @@
           "chats",
           "team_unread",
           "badge"
-        ],
-        "description": "MISSING CLASS DOCUMENTATION"
+        ]
       },
       "serverChatDraftParams": {
         "type": "object",
@@ -6827,8 +7023,7 @@
           "jid",
           "draft",
           "draft_num"
-        ],
-        "description": "MISSING CLASS DOCUMENTATION"
+        ]
       },
       "serverChatLastreadParams": {
         "type": "object",
@@ -6850,8 +7045,7 @@
           "chats",
           "team_unread",
           "badge"
-        ],
-        "description": "MISSING CLASS DOCUMENTATION"
+        ]
       },
       "serverChatUpdatedParams": {
         "type": "object",
@@ -6873,8 +7067,7 @@
           "chats",
           "team_unread",
           "badge"
-        ],
-        "description": "MISSING CLASS DOCUMENTATION"
+        ]
       },
       "serverConfirmParams": {
         "type": "object",
@@ -6886,8 +7079,7 @@
         },
         "required": [
           "confirm_id"
-        ],
-        "description": "MISSING CLASS DOCUMENTATION"
+        ]
       },
       "serverContactUpdatedParams": {
         "type": "object",
@@ -6899,8 +7091,7 @@
         },
         "required": [
           "contacts"
-        ],
-        "description": "MISSING CLASS DOCUMENTATION"
+        ]
       },
       "serverDebugParams": {
         "type": "object",
@@ -6912,8 +7103,7 @@
         },
         "required": [
           "text"
-        ],
-        "description": "MISSING CLASS DOCUMENTATION"
+        ]
       },
       "serverLoginParams": {
         "type": "object",
@@ -6925,8 +7115,7 @@
         },
         "required": [
           "device_name"
-        ],
-        "description": "MISSING CLASS DOCUMENTATION"
+        ]
       },
       "serverMessageReceivedParams": {
         "type": "object",
@@ -6938,8 +7127,7 @@
         },
         "required": [
           "messages"
-        ],
-        "description": "MISSING CLASS DOCUMENTATION"
+        ]
       },
       "serverMessageUpdatedParams": {
         "type": "object",
@@ -6971,8 +7159,7 @@
           "chat_counters",
           "team_unread",
           "badge"
-        ],
-        "description": "MISSING CLASS DOCUMENTATION"
+        ]
       },
       "serverOnlineParams": {
         "type": "object",
@@ -6988,8 +7175,7 @@
         },
         "required": [
           "contacts"
-        ],
-        "description": "MISSING CLASS DOCUMENTATION"
+        ]
       },
       "serverPanicParams": {
         "type": "object",
@@ -7005,8 +7191,7 @@
         },
         "required": [
           "code"
-        ],
-        "description": "MISSING CLASS DOCUMENTATION"
+        ]
       },
       "serverProcessingParams": {
         "type": "object",
@@ -7038,8 +7223,7 @@
           "has_error",
           "num",
           "total"
-        ],
-        "description": "MISSING CLASS DOCUMENTATION"
+        ]
       },
       "serverRemindDeletedParams": {
         "type": "object",
@@ -7051,8 +7235,7 @@
         },
         "required": [
           "reminds"
-        ],
-        "description": "MISSING CLASS DOCUMENTATION"
+        ]
       },
       "serverRemindFiredParams": {
         "type": "object",
@@ -7064,8 +7247,7 @@
         },
         "required": [
           "reminds"
-        ],
-        "description": "MISSING CLASS DOCUMENTATION"
+        ]
       },
       "serverRemindUpdatedParams": {
         "type": "object",
@@ -7077,8 +7259,7 @@
         },
         "required": [
           "reminds"
-        ],
-        "description": "MISSING CLASS DOCUMENTATION"
+        ]
       },
       "serverSectionDeletedParams": {
         "type": "object",
@@ -7101,8 +7282,7 @@
           "chat_type",
           "sections",
           "gentime"
-        ],
-        "description": "MISSING CLASS DOCUMENTATION"
+        ]
       },
       "serverSectionUpdatedParams": {
         "type": "object",
@@ -7125,8 +7305,7 @@
           "chat_type",
           "sections",
           "gentime"
-        ],
-        "description": "MISSING CLASS DOCUMENTATION"
+        ]
       },
       "serverTagDeletedParams": {
         "type": "object",
@@ -7138,8 +7317,7 @@
         },
         "required": [
           "tags"
-        ],
-        "description": "MISSING CLASS DOCUMENTATION"
+        ]
       },
       "serverTagUpdatedParams": {
         "type": "object",
@@ -7151,8 +7329,7 @@
         },
         "required": [
           "tags"
-        ],
-        "description": "MISSING CLASS DOCUMENTATION"
+        ]
       },
       "serverTeamCountersParams": {
         "type": "object",
@@ -7169,8 +7346,7 @@
         "required": [
           "teams",
           "badge"
-        ],
-        "description": "MISSING CLASS DOCUMENTATION"
+        ]
       },
       "serverTeamDeletedParams": {
         "type": "object",
@@ -7182,21 +7358,18 @@
         },
         "required": [
           "teams"
-        ],
-        "description": "MISSING CLASS DOCUMENTATION"
+        ]
       },
       "serverTeamUpdatedParams": {
         "type": "object",
         "properties": {
           "teams": {
-            "$ref": "#/components/schemas/Team",
-            "description": "DOCUMENTATION MISSING"
+            "$ref": "#/components/schemas/Team"
           }
         },
         "required": [
           "teams"
-        ],
-        "description": "MISSING CLASS DOCUMENTATION"
+        ]
       },
       "serverTimeParams": {
         "type": "object",
@@ -7209,8 +7382,7 @@
         },
         "required": [
           "time"
-        ],
-        "description": "MISSING CLASS DOCUMENTATION"
+        ]
       },
       "serverUploadUpdatedParams": {
         "type": "object",
@@ -7222,8 +7394,7 @@
         },
         "required": [
           "uploads"
-        ],
-        "description": "MISSING CLASS DOCUMENTATION"
+        ]
       },
       "serverWarningParams": {
         "type": "object",
@@ -7240,8 +7411,7 @@
         "required": [
           "message",
           "orig"
-        ],
-        "description": "MISSING CLASS DOCUMENTATION"
+        ]
       }
     },
     "securitySchemes": {
