@@ -91,6 +91,34 @@
         ]
       }
     },
+    "/api/v4/tariffs": {
+      "get": {
+        "description": "Get all tariffs.",
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "ok": {
+                      "type": "boolean"
+                    },
+                    "result": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/TariffBilling"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/v4/teams": {
       "get": {
         "description": "Get the list of teams on the server.",
@@ -113,6 +141,38 @@
                     }
                   }
                 }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "description": "Create new team.",
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "ok": {
+                      "type": "boolean"
+                    },
+                    "result": {
+                      "$ref": "#/components/schemas/Team"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Team"
               }
             }
           }
@@ -981,6 +1041,13 @@
             }
           },
           {
+            "name": "contact_section",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
             "name": "tag",
             "in": "query",
             "schema": {
@@ -1221,6 +1288,10 @@
   },
   "components": {
     "schemas": {
+      "ActionType": {
+        "type": "string",
+        "description": "ActionType for server.processing event"
+      },
       "ActivatePersonalAccountResponse": {
         "type": "object",
         "properties": {
@@ -1239,11 +1310,11 @@
           "count_workplaces": {
             "type": "integer",
             "format": "int32"
-          },
-          "personal_account_id": {
-            "type": "string"
           }
         },
+        "required": [
+          "count_workplaces"
+        ],
         "description": "ActivateWorkplacesOnPersonalAccountRequest request on activate workplace on personal account"
       },
       "ActivateWorkplacesOnPersonalAccountResponse": {
@@ -1299,9 +1370,6 @@
           "delete_date": {
             "type": "string"
           },
-          "personal_account_id": {
-            "type": "string"
-          },
           "team_uuid": {
             "type": "string"
           }
@@ -1317,16 +1385,49 @@
         },
         "description": "AddTeamOnPersonalAccountResponse response on add team on personal account"
       },
+      "AddUserInWorkplaceByJidRequest": {
+        "type": "object",
+        "properties": {
+          "contact_uuid": {
+            "type": "string"
+          }
+        },
+        "description": "AddUserInWorkplaceByJidRequest request on add user on workplace by contact JID"
+      },
+      "AddUserInWorkplaceByJidResponse": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string"
+          },
+          "full_name": {
+            "type": "string"
+          },
+          "last_activity": {
+            "type": "string"
+          },
+          "phone": {
+            "type": "string"
+          },
+          "uuid": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "uuid"
+        ],
+        "description": "AddUserInWorkplaceByJidResponse response on add user on workplace by contact JID"
+      },
       "AddUserInWorkplaceRequest": {
         "type": "object",
         "properties": {
-          "personal_account_id": {
-            "type": "string"
-          },
           "user_uuid": {
             "type": "string"
           }
         },
+        "required": [
+          "user_uuid"
+        ],
         "description": "AddUserInWorkplaceRequest request on add user in workplace on personal account"
       },
       "AddUserInWorkplaceResponse": {
@@ -1341,14 +1442,14 @@
       "AddWorkplacesOnPersonalAccountRequest": {
         "type": "object",
         "properties": {
-          "count_workplaces": {
+          "workplaces_count": {
             "type": "integer",
             "format": "int32"
-          },
-          "personal_account_id": {
-            "type": "string"
           }
         },
+        "required": [
+          "workplaces_count"
+        ],
         "description": "AddWorkplacesOnPersonalAccountRequest request on add workplace on personal account"
       },
       "AddWorkplacesOnPersonalAccountResponse": {
@@ -1375,6 +1476,45 @@
         ],
         "description": "Generic event representation"
       },
+      "Auth": {
+        "type": "object",
+        "properties": {
+          "me": {
+            "$ref": "#/components/schemas/UserWithMe"
+          },
+          "method2fa": {
+            "type": "string"
+          },
+          "recovery2fa": {
+            "type": "boolean"
+          },
+          "required2fa": {
+            "type": "boolean"
+          },
+          "token": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "me",
+          "required2fa",
+          "recovery2fa",
+          "method2fa"
+        ]
+      },
+      "AvatarColors": {
+        "type": "object",
+        "properties": {
+          "task_default": {
+            "$ref": "#/components/schemas/RGBColor",
+            "description": "TaskDefault color"
+          }
+        },
+        "required": [
+          "task_default"
+        ],
+        "description": "AvatarColors avatar colors for app"
+      },
       "BaseEvent": {
         "type": "object",
         "properties": {
@@ -1389,6 +1529,24 @@
           "event"
         ],
         "description": "Base of all events"
+      },
+      "Bg": {
+        "type": "object",
+        "properties": {
+          "badge_background": {
+            "$ref": "#/components/schemas/RGBColor",
+            "description": "BadgeBackground color"
+          },
+          "fade": {
+            "$ref": "#/components/schemas/RGBColor",
+            "description": "Fade color"
+          }
+        },
+        "required": [
+          "badge_background",
+          "fade"
+        ],
+        "description": "Bg bg colors for app"
       },
       "BlockPersonalAccountResponse": {
         "type": "object",
@@ -1468,6 +1626,34 @@
           "simple_disable"
         ],
         "description": "ButtonColors button colors for app"
+      },
+      "CallColors": {
+        "type": "object",
+        "properties": {
+          "button_active": {
+            "$ref": "#/components/schemas/RGBColor",
+            "description": "ButtonActive color"
+          },
+          "button_end_call": {
+            "$ref": "#/components/schemas/RGBColor",
+            "description": "ButtonEndCall color"
+          },
+          "callbar_background": {
+            "$ref": "#/components/schemas/RGBColor",
+            "description": "CallBarBackground color"
+          },
+          "icon_callbar": {
+            "$ref": "#/components/schemas/RGBColor",
+            "description": "IconCallBar color"
+          }
+        },
+        "required": [
+          "callbar_background",
+          "icon_callbar",
+          "button_active",
+          "button_end_call"
+        ],
+        "description": "CallColors call colors for app"
       },
       "CallDevice": {
         "type": "object",
@@ -1563,6 +1749,10 @@
             "type": "string",
             "description": "Contact name"
           },
+          "enabled_screenshare": {
+            "type": "boolean",
+            "description": "Screenshare state"
+          },
           "enabled_video": {
             "type": "boolean",
             "description": "Video state"
@@ -1591,6 +1781,7 @@
           "icon",
           "muted",
           "enabled_video",
+          "enabled_screenshare",
           "devices"
         ],
         "description": "Call participant"
@@ -1598,6 +1789,27 @@
       "CallType": {
         "type": "string",
         "description": "CallType .."
+      },
+      "ChangeTariffBilling": {
+        "type": "object",
+        "properties": {
+          "close_date": {
+            "type": "string"
+          },
+          "create_date": {
+            "type": "string"
+          },
+          "open_date": {
+            "type": "string"
+          },
+          "tariff_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "tariff_id"
+        ],
+        "description": "ChangeTariffBilling struct of changes tariffs by personal account"
       },
       "Chat": {
         "type": "object",
@@ -1642,6 +1854,10 @@
           "can_join": {
             "type": "boolean",
             "description": "Can I join to this public group/task"
+          },
+          "can_mute_all": {
+            "type": "boolean",
+            "description": "Can I mute all in call"
           },
           "can_remove_member": {
             "type": "boolean",
@@ -1797,6 +2013,20 @@
               "$ref": "#/components/schemas/MarkupEntity"
             },
             "description": "Markup entities for description field. Experimental"
+          },
+          "meeting_duration": {
+            "type": "integer",
+            "format": "int32",
+            "description": "Meeting duration"
+          },
+          "meeting_freq": {
+            "type": "boolean",
+            "description": "Meeting has frequency"
+          },
+          "meeting_start_at": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Start date of meeting chat"
           },
           "members": {
             "type": "array",
@@ -2015,6 +2245,15 @@
         "type": "string",
         "description": "Chat type"
       },
+      "CheckActivePersonalAccountResponse": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean"
+          }
+        },
+        "description": "CheckActivePersonalAccountResponse response on check active personal account"
+      },
       "ClientActivity": {
         "type": "object",
         "properties": {
@@ -2128,6 +2367,25 @@
           "event"
         ],
         "description": "Reject the call"
+      },
+      "ClientCallScreenShare": {
+        "type": "object",
+        "properties": {
+          "confirm_id": {
+            "type": "string"
+          },
+          "event": {
+            "type": "string"
+          },
+          "params": {
+            "$ref": "#/components/schemas/clientCallScreenShareParams"
+          }
+        },
+        "required": [
+          "params",
+          "event"
+        ],
+        "description": "ClientCallScreenShare event for enable/disable screen share"
       },
       "ClientCallSdp": {
         "type": "object",
@@ -2371,27 +2629,6 @@
         ],
         "description": "Empty message for checking server connection"
       },
-      "CloseTariffRequest": {
-        "type": "object",
-        "properties": {
-          "close_date": {
-            "type": "string"
-          }
-        },
-        "description": "Request to close (archive) the tariff"
-      },
-      "CloseTariffResponse": {
-        "type": "object",
-        "properties": {
-          "success": {
-            "type": "boolean"
-          }
-        },
-        "required": [
-          "success"
-        ],
-        "description": "Response from closing (archiving) the tariff"
-      },
       "ColorRule": {
         "type": "object",
         "properties": {
@@ -2501,9 +2738,17 @@
             "type": "boolean",
             "description": "Can I create group chats in this team"
           },
+          "can_create_meeting": {
+            "type": "boolean",
+            "description": "Can I create meetings in this team"
+          },
           "can_create_task": {
             "type": "boolean",
             "description": "Can I create task for this contact"
+          },
+          "can_create_team": {
+            "type": "boolean",
+            "description": "Can i create new team"
           },
           "can_delete": {
             "type": "boolean",
@@ -2512,6 +2757,10 @@
           "can_delete_any_message": {
             "type": "boolean",
             "description": "Deprecated"
+          },
+          "can_import_chats": {
+            "type": "boolean",
+            "description": "Can I import chats from external services (now its only telegram)"
           },
           "can_import_tasks": {
             "type": "boolean",
@@ -2651,6 +2900,18 @@
             "format": "date-time",
             "description": "Last activity in this team (iso datetime)"
           },
+          "meeting_mshort_view": {
+            "type": "boolean",
+            "description": "Short view in meeting list in mobile app"
+          },
+          "meeting_notifications_enabled": {
+            "type": "boolean",
+            "description": "Push notifications for meeting chats"
+          },
+          "meeting_short_view": {
+            "type": "boolean",
+            "description": "Short view in meeting list"
+          },
           "mood": {
             "type": "string",
             "description": "Mood in this team"
@@ -2675,6 +2936,10 @@
             "type": "string",
             "description": "Quiet time start"
           },
+          "reaction_notifications_enabled": {
+            "type": "boolean",
+            "description": "Push notifications for reactions"
+          },
           "role": {
             "type": "string",
             "description": "Role in this team"
@@ -2693,6 +2958,10 @@
           "status": {
             "$ref": "#/components/schemas/TeamStatus",
             "description": "Status in this team"
+          },
+          "systembot_notifications_enabled": {
+            "type": "boolean",
+            "description": "Push notifications from systembot"
           },
           "task_mshort_view": {
             "type": "boolean",
@@ -2827,6 +3096,309 @@
         ],
         "description": "Short contact representation"
       },
+      "ContactsSectionGetRequest": {
+        "type": "object",
+        "properties": {
+          "IsArchived": {
+            "type": "boolean",
+            "nullable": true,
+            "description": "* ?is_archived="
+          },
+          "IsBot": {
+            "type": "boolean",
+            "nullable": true,
+            "description": "* ?is_bot="
+          },
+          "Limit": {
+            "type": "integer"
+          },
+          "Offset": {
+            "type": "integer"
+          },
+          "SectionUid": {
+            "type": "string",
+            "description": "Team Section"
+          }
+        },
+        "required": [
+          "SectionUid",
+          "Limit",
+          "Offset"
+        ]
+      },
+      "Counterparty": {
+        "type": "object",
+        "properties": {
+          "accounting_dictionary_code": {
+            "type": "string"
+          },
+          "classifier_of_industrial_enterprises": {
+            "type": "string"
+          },
+          "counterparty_type": {
+            "$ref": "#/components/schemas/CounterpartyType"
+          },
+          "created_at": {
+            "type": "string"
+          },
+          "electronic_document_management_id": {
+            "type": "string"
+          },
+          "full_name": {
+            "type": "string"
+          },
+          "id": {
+            "type": "string"
+          },
+          "legal_address": {
+            "type": "string"
+          },
+          "personal_account_id": {
+            "type": "string"
+          },
+          "physical_address": {
+            "type": "string"
+          },
+          "taxpayer_identification_number": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "personal_account_id",
+          "full_name",
+          "taxpayer_identification_number",
+          "legal_address",
+          "physical_address",
+          "created_at",
+          "counterparty_type"
+        ]
+      },
+      "CounterpartyCreateRequest": {
+        "type": "object",
+        "properties": {
+          "accounting_dictionary_code": {
+            "type": "string"
+          },
+          "classifier_of_industrial_enterprises": {
+            "type": "string"
+          },
+          "counterparty_type": {
+            "$ref": "#/components/schemas/CounterpartyType"
+          },
+          "electronic_document_management_id": {
+            "type": "string"
+          },
+          "full_name": {
+            "type": "string"
+          },
+          "legal_address": {
+            "type": "string"
+          },
+          "personal_account_id": {
+            "type": "string"
+          },
+          "physical_address": {
+            "type": "string"
+          },
+          "taxpayer_identification_number": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "personal_account_id",
+          "full_name",
+          "taxpayer_identification_number",
+          "legal_address",
+          "physical_address",
+          "counterparty_type"
+        ]
+      },
+      "CounterpartyCreateResponse": {
+        "type": "object",
+        "properties": {
+          "accounting_dictionary_code": {
+            "type": "string"
+          },
+          "classifier_of_industrial_enterprises": {
+            "type": "string"
+          },
+          "counterparty_type": {
+            "$ref": "#/components/schemas/CounterpartyType"
+          },
+          "created_at": {
+            "type": "string"
+          },
+          "electronic_document_management_id": {
+            "type": "string"
+          },
+          "full_name": {
+            "type": "string"
+          },
+          "id": {
+            "type": "string"
+          },
+          "legal_address": {
+            "type": "string"
+          },
+          "personal_account_id": {
+            "type": "string"
+          },
+          "physical_address": {
+            "type": "string"
+          },
+          "taxpayer_identification_number": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "personal_account_id",
+          "full_name",
+          "taxpayer_identification_number",
+          "legal_address",
+          "physical_address",
+          "created_at",
+          "counterparty_type"
+        ]
+      },
+      "CounterpartyDeleteRequest": {
+        "type": "object",
+        "properties": {
+          "counterparty_ids": {
+            "type": "string"
+          }
+        }
+      },
+      "CounterpartyGetRequest": {
+        "type": "object",
+        "properties": {
+          "accounting_dictionary_code": {
+            "type": "string"
+          },
+          "counterparty_ids": {
+            "type": "string"
+          },
+          "limit": {
+            "$ref": "#/components/schemas/uint32"
+          },
+          "offset": {
+            "$ref": "#/components/schemas/uint32"
+          },
+          "personal_account_id": {
+            "type": "string"
+          }
+        }
+      },
+      "CounterpartyGetResponse": {
+        "type": "object",
+        "properties": {
+          "counterparty_list": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Counterparty"
+            }
+          }
+        },
+        "required": [
+          "counterparty_list"
+        ]
+      },
+      "CounterpartyType": {
+        "type": "string"
+      },
+      "CounterpartyUpdateRequest": {
+        "type": "object",
+        "properties": {
+          "accounting_dictionary_code": {
+            "type": "string"
+          },
+          "classifier_of_industrial_enterprises": {
+            "type": "string"
+          },
+          "counterparty_type": {
+            "$ref": "#/components/schemas/CounterpartyType"
+          },
+          "electronic_document_management_id": {
+            "type": "string"
+          },
+          "full_name": {
+            "type": "string"
+          },
+          "id": {
+            "type": "string"
+          },
+          "legal_address": {
+            "type": "string"
+          },
+          "personal_account_id": {
+            "type": "string"
+          },
+          "physical_address": {
+            "type": "string"
+          },
+          "taxpayer_identification_number": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "personal_account_id",
+          "full_name",
+          "taxpayer_identification_number",
+          "legal_address",
+          "physical_address",
+          "counterparty_type"
+        ]
+      },
+      "CounterpartyUpdateResponse": {
+        "type": "object",
+        "properties": {
+          "accounting_dictionary_code": {
+            "type": "string"
+          },
+          "classifier_of_industrial_enterprises": {
+            "type": "string"
+          },
+          "counterparty_type": {
+            "$ref": "#/components/schemas/CounterpartyType"
+          },
+          "created_at": {
+            "type": "string"
+          },
+          "electronic_document_management_id": {
+            "type": "string"
+          },
+          "full_name": {
+            "type": "string"
+          },
+          "id": {
+            "type": "string"
+          },
+          "legal_address": {
+            "type": "string"
+          },
+          "personal_account_id": {
+            "type": "string"
+          },
+          "physical_address": {
+            "type": "string"
+          },
+          "taxpayer_identification_number": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "personal_account_id",
+          "full_name",
+          "taxpayer_identification_number",
+          "legal_address",
+          "physical_address",
+          "created_at",
+          "counterparty_type"
+        ]
+      },
       "Country": {
         "type": "object",
         "properties": {
@@ -2858,6 +3430,65 @@
         ],
         "description": "Country for phone numbers selection on login screen"
       },
+      "CreateBillingContactRequest": {
+        "type": "object",
+        "properties": {
+          "family_name": {
+            "type": "string"
+          },
+          "given_name": {
+            "type": "string"
+          },
+          "patronymic": {
+            "type": "string"
+          },
+          "phone": {
+            "type": "string"
+          },
+          "role": {
+            "type": "string"
+          },
+          "sections": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "status": {
+            "$ref": "#/components/schemas/TeamStatus"
+          },
+          "user_uid": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "phone"
+        ]
+      },
+      "CreateChangeTariffOnPersonalAccountRequest": {
+        "type": "object",
+        "properties": {
+          "open_date": {
+            "type": "string"
+          },
+          "tariff_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "tariff_id"
+        ],
+        "description": "CreateChangeTariffOnPersonalAccountRequest request on create change tariff on personal account"
+      },
+      "CreateChangeTariffOnPersonalAccountResponse": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean"
+          }
+        },
+        "description": "CreateChangeTariffOnPersonalAccountResponse response on create change tariff on personal account"
+      },
       "CreatePersonalAccountRequest": {
         "type": "object",
         "properties": {
@@ -2883,95 +3514,98 @@
       "CreatePersonalAccountResponse": {
         "type": "object",
         "properties": {
-          "discount_amount": {
-            "type": "integer",
-            "format": "int32",
-            "description": "Amount of Discount on personal account"
-          },
-          "discount_id": {
+          "block_date": {
             "type": "string",
-            "description": "ID Discount on personal account"
+            "description": "Account blocking date"
           },
-          "free_workplaces": {
-            "type": "integer",
-            "format": "int32",
+          "empty_workplace_count": {
+            "$ref": "#/components/schemas/uint32",
+            "description": "Count of empty workplaces on personal account"
+          },
+          "free_workplace_count": {
+            "$ref": "#/components/schemas/uint32",
             "description": "Count of free workplaces on personal account"
           },
-          "full_name": {
-            "type": "string",
-            "description": "Full name of owner personal account"
+          "is_blocked": {
+            "type": "boolean",
+            "description": "Is the account blocked"
+          },
+          "is_suspended": {
+            "type": "boolean",
+            "description": "Is the account suspended"
           },
           "next_billing_date": {
             "type": "string",
             "description": "Date of next debiting funds"
           },
-          "owner_uuid": {
-            "type": "string",
+          "occupied_workplace_count": {
+            "$ref": "#/components/schemas/uint32",
+            "description": "Count of occupied workplaces on personal account"
+          },
+          "owner": {
+            "$ref": "#/components/schemas/Contact",
+            "description": "Owner of this personal account"
+          },
+          "owner_id": {
+            "$ref": "#/components/schemas/uint64",
             "description": "ID User who owns this personal account"
           },
-          "paid_workplaces": {
-            "type": "integer",
-            "format": "int32",
+          "owner_uuid": {
+            "type": "string",
+            "description": "UUID of User who owns this personal account"
+          },
+          "paid_workplace_count": {
+            "$ref": "#/components/schemas/uint32",
             "description": "Count of paid workplaces on personal account"
           },
           "personal_account_id": {
-            "type": "string",
+            "$ref": "#/components/schemas/uint64",
             "description": "PersonalAccountBilling ID"
-          },
-          "phone": {
-            "type": "string",
-            "description": "Phone number of owner account"
           },
           "status": {
             "$ref": "#/components/schemas/PersonalAccountStatus",
             "description": "Status of personal account"
           },
-          "tariff_id": {
+          "suspend_date": {
             "type": "string",
-            "description": "ID Tariff on this personal account"
+            "description": "Account suspending date"
           },
-          "tariff_name": {
-            "type": "string",
-            "description": "Name Tariff on this personal account"
+          "tariff": {
+            "$ref": "#/components/schemas/TariffBilling",
+            "description": "Tariff on this personal account"
           },
-          "team_count": {
-            "type": "integer",
-            "format": "int32",
+          "teams_count": {
+            "$ref": "#/components/schemas/uint32",
             "description": "Count of teams on personal account"
           },
-          "users_count": {
-            "type": "integer",
-            "format": "int32",
-            "description": "Count of user on personal account"
-          },
           "workplace_count": {
-            "type": "integer",
-            "format": "int32",
+            "$ref": "#/components/schemas/uint32",
             "description": "Count of workplaces on personal account"
           }
         },
         "required": [
+          "personal_account_id",
+          "owner_id",
           "owner_uuid",
-          "tariff_id",
-          "tariff_name",
-          "discount_id",
-          "discount_amount",
-          "status",
-          "next_billing_date",
-          "team_count",
+          "teams_count",
           "workplace_count",
-          "users_count",
-          "free_workplaces",
-          "paid_workplaces"
+          "empty_workplace_count",
+          "occupied_workplace_count",
+          "free_workplace_count",
+          "paid_workplace_count",
+          "is_blocked",
+          "is_suspended",
+          "status",
+          "tariff"
         ],
         "description": "CreatePersonalAccountResponse response on create personal account"
       },
       "CreateTariffRequest": {
         "type": "object",
         "properties": {
-          "close_date": {
+          "benefit": {
             "type": "string",
-            "description": "Date of closing tariff"
+            "description": "Benefit of tariff"
           },
           "cost_workplace": {
             "type": "string",
@@ -2981,59 +3615,85 @@
             "$ref": "#/components/schemas/Currency",
             "description": "Currency of tariff"
           },
+          "description": {
+            "type": "string",
+            "description": "Description of tariff"
+          },
           "disk_space_quota_mb": {
             "type": "string",
             "description": "Disk space limit per user"
           },
-          "free_workplaces": {
-            "type": "integer",
-            "format": "int32",
+          "free_workplace_countt": {
+            "$ref": "#/components/schemas/uint32",
             "description": "Count of free workspaces"
           },
-          "is_billing_free": {
-            "type": "boolean",
-            "description": "Flag of availability of free seats when exceeding FreeWorkplace"
-          },
-          "is_billing_full_time": {
-            "type": "boolean",
-            "description": "Flag of accounting without looking at the number of days before the billing period"
-          },
-          "is_default_tariff": {
+          "is_default": {
             "type": "boolean",
             "description": "Default tariff flag that is set when registering an account"
           },
-          "is_recalc_change_tariff": {
+          "is_free": {
             "type": "boolean",
-            "description": "Flag for accounting for unspent days when switching to a new tariff"
+            "description": "Flag of availability of free seats when exceeding FreeWorkplace"
+          },
+          "is_public": {
+            "type": "boolean",
+            "description": "Flag of publicity"
           },
           "max_video_user": {
-            "type": "integer",
-            "format": "int32",
+            "$ref": "#/components/schemas/uint32",
             "description": "Maximum count of users in video conference"
           },
           "max_voice_user": {
-            "type": "integer",
-            "format": "int32",
+            "$ref": "#/components/schemas/uint32",
             "description": "Maximum count of users in voice conference"
+          },
+          "max_workplace_count": {
+            "$ref": "#/components/schemas/uint32",
+            "description": "Count of maximum workspaces on tariff"
+          },
+          "min_workplace_count": {
+            "$ref": "#/components/schemas/uint32",
+            "description": "Count of minimum workspaces on tariff"
+          },
+          "name": {
+            "type": "string",
+            "description": "Name of tariff"
+          },
+          "nomenclature_name": {
+            "type": "string",
+            "description": "Nomenclature name of tariff"
           },
           "open_date": {
             "type": "string",
             "description": "Date of opening tariff"
           },
           "period_days": {
-            "type": "integer",
-            "format": "int32",
+            "$ref": "#/components/schemas/uint32",
             "description": "Number of paid days"
           },
-          "tariff_name": {
-            "type": "string",
-            "description": "Name of tariff"
+          "priority": {
+            "$ref": "#/components/schemas/uint32",
+            "description": "Priority of tariff"
+          },
+          "step_increasing_workplaces": {
+            "$ref": "#/components/schemas/uint32",
+            "description": "Minimum step of change count workspaces on tariff"
+          },
+          "video_call_bitrate": {
+            "$ref": "#/components/schemas/uint32",
+            "description": "Bitrate of video in video co"
+          },
+          "video_sharing_bitrate": {
+            "$ref": "#/components/schemas/uint32",
+            "description": "Bitrate of video in video sharing"
           }
         },
         "required": [
+          "name",
+          "nomenclature_name",
           "currency",
-          "period_days",
-          "tariff_name"
+          "cost_workplace",
+          "period_days"
         ],
         "description": "Request to create the tariff"
       },
@@ -3198,13 +3858,31 @@
         ],
         "description": "DLPUserData structure to store sender/receiver user information"
       },
+      "DeleteChangeTariffOnPersonalAccountRequest": {
+        "type": "object",
+        "properties": {
+          "tariff_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "tariff_id"
+        ],
+        "description": "DeleteChangeTariffOnPersonalAccountRequest request on delete change tariff on personal account"
+      },
+      "DeleteChangeTariffOnPersonalAccountResponse": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean"
+          }
+        },
+        "description": "DeleteChangeTariffOnPersonalAccountResponse response on delete change tariff om personal account"
+      },
       "DeleteTeamFromPersonalAccountRequest": {
         "type": "object",
         "properties": {
           "delete_date": {
-            "type": "string"
-          },
-          "personal_account_id": {
             "type": "string"
           },
           "team_uuid": {
@@ -3225,13 +3903,13 @@
       "DeleteUserFromWorkplaceRequest": {
         "type": "object",
         "properties": {
-          "personal_account_id": {
-            "type": "string"
-          },
           "user_uuid": {
             "type": "string"
           }
         },
+        "required": [
+          "user_uuid"
+        ],
         "description": "DeleteUserFromWorkplaceRequest request on delete user from workplace on personal account"
       },
       "DeleteUserFromWorkplaceResponse": {
@@ -3249,11 +3927,11 @@
           "count_workplaces": {
             "type": "integer",
             "format": "int32"
-          },
-          "personal_account_id": {
-            "type": "string"
           }
         },
+        "required": [
+          "count_workplaces"
+        ],
         "description": "DeleteWorkplacesOnPersonalAccountRequest request on delete workplace on personal account"
       },
       "DeleteWorkplacesOnPersonalAccountResponse": {
@@ -3452,7 +4130,7 @@
           },
           "allow_admin_mute": {
             "type": "boolean",
-            "description": "Wiki pages in chats. Experimental"
+            "description": "Wiki pages in chats. Experimental Deprecated: this field is not used"
           },
           "amplitude_api_key": {
             "type": "string",
@@ -3485,9 +4163,9 @@
             "type": "boolean",
             "description": "Two-factor authentication (2FA) enabled"
           },
-          "auth_by_ntlm": {
+          "auth_by_kerberos": {
             "type": "boolean",
-            "description": "NTLM authentication enabled"
+            "description": "Kerberos authentication enabled"
           },
           "auth_by_password": {
             "type": "boolean",
@@ -3500,6 +4178,10 @@
           "auth_by_sms": {
             "type": "boolean",
             "description": "SMS authentication enabled"
+          },
+          "billing": {
+            "type": "boolean",
+            "description": "Billing services integrations"
           },
           "build": {
             "type": "string",
@@ -3524,6 +4206,10 @@
           "calls_video_enabled": {
             "type": "boolean",
             "description": "CallsVideoEnabled enabled or disabled video calls"
+          },
+          "calls_video_multistream_enabled": {
+            "type": "boolean",
+            "description": "CallsVideoMultistreamEnabled enabled or disabled video in multistream mode (for janus)"
           },
           "custom_app_icon_name": {
             "type": "string",
@@ -3609,6 +4295,10 @@
               "$ref": "#/components/schemas/ICEServer"
             },
             "description": "ICE servers for WebRTC"
+          },
+          "ice_transport_policy": {
+            "$ref": "#/components/schemas/ICETransportPolicy",
+            "description": "IceTransportPolicy a ice transport policy"
           },
           "installation_title": {
             "type": "string",
@@ -3789,6 +4479,10 @@
             "type": "integer",
             "description": "Resend message in n seconds if no confirmation from server given"
           },
+          "rumarket_app": {
+            "type": "string",
+            "description": "Link to Rumarket store"
+          },
           "safari_push_id": {
             "type": "string",
             "description": "Safari push id for web-push notifications"
@@ -3841,6 +4535,10 @@
             "type": "string",
             "description": "Static files server address"
           },
+          "vcs_enabled": {
+            "type": "boolean",
+            "description": "VcsEnabled enabled or disabled vcs"
+          },
           "web_login_background": {
             "type": "string",
             "description": "WebBackground image url, if any"
@@ -3862,6 +4560,7 @@
           "android_app",
           "ios_corp_app",
           "android_corp_app",
+          "rumarket_app",
           "theme",
           "min_ios_version",
           "min_android_version",
@@ -3908,6 +4607,8 @@
           "calls_version",
           "calls_audio_enabled",
           "calls_video_enabled",
+          "calls_video_multistream_enabled",
+          "vcs_enabled",
           "mobile_calls",
           "calls_record",
           "safari_push_id",
@@ -3955,6 +4656,14 @@
             "$ref": "#/components/schemas/RGBColor",
             "description": "Text color"
           },
+          "text_avatar": {
+            "$ref": "#/components/schemas/RGBColor",
+            "description": "TextAvatar color"
+          },
+          "text_badge": {
+            "$ref": "#/components/schemas/RGBColor",
+            "description": "TextBadge color"
+          },
           "title": {
             "$ref": "#/components/schemas/RGBColor",
             "description": "Title color"
@@ -3967,14 +4676,42 @@
           "brand_button",
           "simple_button",
           "bubble_sent",
-          "bubble_received"
+          "bubble_received",
+          "text_avatar",
+          "text_badge"
         ],
         "description": "FontColors font colors for app"
+      },
+      "Freq": {
+        "type": "object",
+        "properties": {
+          "freq_days": {
+            "type": "array",
+            "items": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          "frequency": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "repeatability_description": {
+            "type": "string"
+          },
+          "repeatability_type": {
+            "$ref": "#/components/schemas/MeetingRepeatabilityType"
+          }
+        },
+        "required": [
+          "frequency",
+          "repeatability_type"
+        ]
       },
       "GetActiveTariffsListResponse": {
         "type": "object",
         "properties": {
-          "tariffs": {
+          "tariff_list": {
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/TariffBilling"
@@ -3982,93 +4719,108 @@
           }
         },
         "required": [
-          "tariffs"
+          "tariff_list"
         ],
         "description": "Response from getting a list of active tariffs"
+      },
+      "GetChangesTariffsByPersonalAccountResponse": {
+        "type": "object",
+        "properties": {
+          "tariffs_changes": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ChangeTariffBilling"
+            }
+          }
+        },
+        "description": "GetChangesTariffsByPersonalAccountResponse response on get changes tariffs by personal account"
       },
       "GetPersonalAccountByIDResponse": {
         "type": "object",
         "properties": {
-          "discount_amount": {
-            "type": "integer",
-            "format": "int32",
-            "description": "Amount of Discount on personal account"
-          },
-          "discount_id": {
+          "block_date": {
             "type": "string",
-            "description": "ID Discount on personal account"
+            "description": "Account blocking date"
           },
-          "free_workplaces": {
-            "type": "integer",
-            "format": "int32",
+          "empty_workplace_count": {
+            "$ref": "#/components/schemas/uint32",
+            "description": "Count of empty workplaces on personal account"
+          },
+          "free_workplace_count": {
+            "$ref": "#/components/schemas/uint32",
             "description": "Count of free workplaces on personal account"
           },
-          "full_name": {
-            "type": "string",
-            "description": "Full name of owner personal account"
+          "is_blocked": {
+            "type": "boolean",
+            "description": "Is the account blocked"
+          },
+          "is_suspended": {
+            "type": "boolean",
+            "description": "Is the account suspended"
           },
           "next_billing_date": {
             "type": "string",
             "description": "Date of next debiting funds"
           },
-          "owner_uuid": {
-            "type": "string",
+          "occupied_workplace_count": {
+            "$ref": "#/components/schemas/uint32",
+            "description": "Count of occupied workplaces on personal account"
+          },
+          "owner": {
+            "$ref": "#/components/schemas/Contact",
+            "description": "Owner of this personal account"
+          },
+          "owner_id": {
+            "$ref": "#/components/schemas/uint64",
             "description": "ID User who owns this personal account"
           },
-          "paid_workplaces": {
-            "type": "integer",
-            "format": "int32",
+          "owner_uuid": {
+            "type": "string",
+            "description": "UUID of User who owns this personal account"
+          },
+          "paid_workplace_count": {
+            "$ref": "#/components/schemas/uint32",
             "description": "Count of paid workplaces on personal account"
           },
           "personal_account_id": {
-            "type": "string",
+            "$ref": "#/components/schemas/uint64",
             "description": "PersonalAccountBilling ID"
-          },
-          "phone": {
-            "type": "string",
-            "description": "Phone number of owner account"
           },
           "status": {
             "$ref": "#/components/schemas/PersonalAccountStatus",
             "description": "Status of personal account"
           },
-          "tariff_id": {
+          "suspend_date": {
             "type": "string",
-            "description": "ID Tariff on this personal account"
+            "description": "Account suspending date"
           },
-          "tariff_name": {
-            "type": "string",
-            "description": "Name Tariff on this personal account"
+          "tariff": {
+            "$ref": "#/components/schemas/TariffBilling",
+            "description": "Tariff on this personal account"
           },
-          "team_count": {
-            "type": "integer",
-            "format": "int32",
+          "teams_count": {
+            "$ref": "#/components/schemas/uint32",
             "description": "Count of teams on personal account"
           },
-          "users_count": {
-            "type": "integer",
-            "format": "int32",
-            "description": "Count of user on personal account"
-          },
           "workplace_count": {
-            "type": "integer",
-            "format": "int32",
+            "$ref": "#/components/schemas/uint32",
             "description": "Count of workplaces on personal account"
           }
         },
         "required": [
+          "personal_account_id",
+          "owner_id",
           "owner_uuid",
-          "tariff_id",
-          "tariff_name",
-          "discount_id",
-          "discount_amount",
-          "status",
-          "next_billing_date",
-          "team_count",
+          "teams_count",
           "workplace_count",
-          "users_count",
-          "free_workplaces",
-          "paid_workplaces"
+          "empty_workplace_count",
+          "occupied_workplace_count",
+          "free_workplace_count",
+          "paid_workplace_count",
+          "is_blocked",
+          "is_suspended",
+          "status",
+          "tariff"
         ],
         "description": "GetPersonalAccountByIDResponse response on get personal account by ID"
       },
@@ -4087,7 +4839,7 @@
       "GetTariffsListResponse": {
         "type": "object",
         "properties": {
-          "tariffs": {
+          "tariff_list": {
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/TariffBilling"
@@ -4095,9 +4847,169 @@
           }
         },
         "required": [
-          "tariffs"
+          "tariff_list"
         ],
         "description": "Response from getting a list of tariffs"
+      },
+      "GetTeamOnPersonalAccountResponse": {
+        "type": "object",
+        "properties": {
+          "close_date": {
+            "type": "string"
+          },
+          "open_date": {
+            "type": "string"
+          },
+          "personal_account_id": {
+            "type": "string"
+          },
+          "team_id": {
+            "type": "string"
+          },
+          "team_uuid": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "personal_account_id",
+          "team_id",
+          "team_uuid",
+          "open_date"
+        ]
+      },
+      "GetTeamsOnPersonalAccountResponse": {
+        "type": "object",
+        "properties": {
+          "teams": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/GetTeamOnPersonalAccountResponse"
+            }
+          }
+        },
+        "required": [
+          "teams"
+        ]
+      },
+      "GetUnpaidWorkplacesByPersonalAccountResponse": {
+        "type": "object",
+        "properties": {
+          "count": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "description": "GetUnpaidWorkplacesByPersonalAccountResponse response on get count unpaid workplaces by personal account"
+      },
+      "GetUsersInfoByUserUUIDArrayExcludingTeamMembersRequest": {
+        "type": "object",
+        "properties": {
+          "limit": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "offset": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "team_uuid": {
+            "type": "string"
+          },
+          "user_uuid": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "required": [
+          "user_uuid",
+          "team_uuid"
+        ],
+        "description": "GetUsersInfoByUserUUIDArrayExcludingTeamMembersRequest request on get user information by array of UUID's users excluding team members in uuid team"
+      },
+      "GetUsersInfoByUserUUIDArrayExcludingTeamMembersResponse": {
+        "type": "object",
+        "properties": {
+          "user_info": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/UserInfo"
+            }
+          }
+        },
+        "description": "GetUsersInfoByUserUUIDArrayExcludingTeamMembersResponse response on get user information by array of UUID's users excluding team members in uuid team"
+      },
+      "GetUsersInfoByUserUUIDArrayRequest": {
+        "type": "object",
+        "properties": {
+          "limit": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "offset": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "user_uuid": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "required": [
+          "user_uuid"
+        ],
+        "description": "GetUsersInfoByUserUUIDArrayRequest request on get user information by array of UUID's users"
+      },
+      "GetUsersInfoByUserUUIDArrayResponse": {
+        "type": "object",
+        "properties": {
+          "user_info": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/UserInfo"
+            }
+          }
+        },
+        "description": "GetUsersInfoByUserUUIDArrayResponse response on get user information by array of UUID's users"
+      },
+      "GetWorkplaceByPersonalAccountResponse": {
+        "type": "object",
+        "properties": {
+          "user_id": {
+            "type": "string"
+          },
+          "user_uuid": {
+            "type": "string"
+          },
+          "workplace_id": {
+            "type": "string"
+          }
+        },
+        "description": "GetWorkplaceByPersonalAccountResponse response on get workplace by personal account"
+      },
+      "GetWorkplacesByPersonalAccountRequest": {
+        "type": "object",
+        "properties": {
+          "options": {
+            "$ref": "#/components/schemas/WorkplaceOptions"
+          }
+        },
+        "description": "GetWorkplacesByPersonalAccountRequest request on get workplaces by personal account"
+      },
+      "GetWorkplacesByPersonalAccountResponse": {
+        "type": "object",
+        "properties": {
+          "workplaces": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/WorkplaceBilling"
+            }
+          }
+        },
+        "description": "GetWorkplacesByPersonalAccountResponse response on get workplaces by personal account"
       },
       "GroupAccessRequest": {
         "type": "object",
@@ -4148,9 +5060,17 @@
       "ICEServer": {
         "type": "object",
         "properties": {
+          "credential": {
+            "type": "string",
+            "description": "Credential - credential for TURN server"
+          },
           "urls": {
             "type": "string",
-            "description": "URls"
+            "description": "Urls - STUN or TURN addresses"
+          },
+          "username": {
+            "type": "string",
+            "description": "UserName - username for TURN server"
           }
         },
         "required": [
@@ -4158,10 +5078,28 @@
         ],
         "description": "Interactive Connectivity Establishment Server for WEB Rtc connection. Readonly"
       },
+      "ICETransportPolicy": {
+        "type": "string",
+        "description": "ICETransportPolicy is a string indicating the transport selection policy the ICE agent should use during negotiation of connections. Available values: 'all', 'relay'"
+      },
       "ISODateTimeString": {
         "type": "string",
         "format": "date-time",
         "description": "Date and time in RFC3339 format. Example: ``2019-09-18T00:00:07.435409Z``"
+      },
+      "IVCSInfo": {
+        "type": "object",
+        "properties": {
+          "conference_id": {
+            "type": "string"
+          },
+          "invite_link": {
+            "type": "string"
+          },
+          "join_token": {
+            "type": "string"
+          }
+        }
       },
       "IconColors": {
         "type": "object",
@@ -4235,6 +5173,10 @@
             "$ref": "#/components/schemas/RGBColor",
             "description": "Error color"
           },
+          "selection": {
+            "$ref": "#/components/schemas/RGBColor",
+            "description": "Selection color"
+          },
           "static": {
             "$ref": "#/components/schemas/RGBColor",
             "description": "Static color"
@@ -4244,7 +5186,8 @@
           "static",
           "active",
           "disable",
-          "error"
+          "error",
+          "selection"
         ],
         "description": "InputColors input colors for app"
       },
@@ -4451,6 +5394,27 @@
         ],
         "description": "Invitation to team"
       },
+      "InvitationToMeeting": {
+        "type": "object",
+        "properties": {
+          "date_start": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "description": {
+            "type": "string"
+          },
+          "meeting_jid": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "description",
+          "date_start",
+          "meeting_jid"
+        ],
+        "description": "InvitationToMeeting Preview"
+      },
       "JID": {
         "type": "string"
       },
@@ -4471,6 +5435,43 @@
           "type"
         ],
         "description": "JavaScript Session Establishment Protocol"
+      },
+      "MappedUser": {
+        "type": "object",
+        "properties": {
+          "contact": {
+            "$ref": "#/components/schemas/Contact",
+            "description": "Contact tada contact data"
+          },
+          "external_user_id": {
+            "type": "string",
+            "description": "ExternalUserID user id from messenger"
+          },
+          "external_user_name": {
+            "type": "string",
+            "description": "ExternalUserName user name from messenger"
+          },
+          "is_admin": {
+            "type": "boolean",
+            "description": "IsAdmin group admin flag"
+          },
+          "is_archive": {
+            "type": "boolean",
+            "description": "IsArchive flag of archive user"
+          },
+          "is_deleted": {
+            "type": "boolean",
+            "description": "IsDeleted flag of deleted user from messenger"
+          }
+        },
+        "required": [
+          "external_user_id",
+          "external_user_name",
+          "is_deleted",
+          "is_archive",
+          "is_admin"
+        ],
+        "description": "MappedUser struct for map internal user with external user"
       },
       "MarkupEntity": {
         "type": "object",
@@ -4531,6 +5532,901 @@
       },
       "Mediatype": {
         "type": "string"
+      },
+      "Meeting": {
+        "type": "object",
+        "properties": {
+          "assignee": {
+            "$ref": "#/components/schemas/JID",
+            "description": "Assignee contact id. Tasks only"
+          },
+          "autocleanup_age": {
+            "type": "integer",
+            "description": "Delete messages in this chat in seconds. Experimental function"
+          },
+          "base_gentime": {
+            "type": "integer",
+            "format": "int64",
+            "description": "Base fields (not related to concrete participant) version"
+          },
+          "can_add_member": {
+            "type": "boolean",
+            "description": "Can I add member to this group chat"
+          },
+          "can_call": {
+            "type": "boolean",
+            "description": "Can I call to this chat"
+          },
+          "can_change_member_status": {
+            "type": "boolean",
+            "description": "Can I change member status in this group chat"
+          },
+          "can_change_settings": {
+            "type": "boolean",
+            "description": "deprecated: use changeable fields"
+          },
+          "can_delete": {
+            "type": "boolean",
+            "description": "Can I delete this chat"
+          },
+          "can_delete_any_message": {
+            "type": "boolean",
+            "description": "Can I delete any message in this chat"
+          },
+          "can_edit": {
+            "type": "boolean"
+          },
+          "can_join": {
+            "type": "boolean",
+            "description": "Can I join to this public group/task"
+          },
+          "can_mute_all": {
+            "type": "boolean",
+            "description": "Can I mute all in call"
+          },
+          "can_remove_member": {
+            "type": "boolean",
+            "description": "Can I remove member from this group chat"
+          },
+          "can_send_message": {
+            "type": "boolean",
+            "description": "Can I send message to this chat"
+          },
+          "can_set_important_any_message": {
+            "type": "boolean",
+            "description": "Can I change Important flag in any message in this chat"
+          },
+          "cant_send_message_reason": {
+            "type": "string",
+            "description": "Why I can't send message to this chat (if can't)"
+          },
+          "changeable_fields": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "List of editable fields"
+          },
+          "chat_type": {
+            "$ref": "#/components/schemas/ChatType",
+            "description": "Chat type"
+          },
+          "collapsed": {
+            "type": "boolean",
+            "description": "Description collapsed. Used for tasks only"
+          },
+          "color_index": {
+            "type": "integer",
+            "description": "Custom color index from table of colors. Tasks only"
+          },
+          "complexity": {
+            "type": "integer",
+            "description": "Task complexity, number"
+          },
+          "counters_enabled": {
+            "type": "boolean",
+            "description": "Include unread messages to counters"
+          },
+          "created": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Creation date, iso datetime"
+          },
+          "deadline": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Task deadline in iso format, if any"
+          },
+          "deadline_expired": {
+            "type": "boolean",
+            "description": "Is task deadline expired"
+          },
+          "default_for_all": {
+            "type": "boolean",
+            "description": "Any new team member will be added to this group chat"
+          },
+          "description": {
+            "type": "string",
+            "description": "Group or task description"
+          },
+          "display_name": {
+            "type": "string",
+            "description": "Title"
+          },
+          "done": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Task done date in iso format, if any"
+          },
+          "done_reason": {
+            "type": "string",
+            "description": "Task done reason, if any"
+          },
+          "draft": {
+            "type": "string",
+            "description": "Last message draft, if any"
+          },
+          "draft_gentime": {
+            "type": "integer",
+            "format": "int64",
+            "description": "Last message draft version, if any"
+          },
+          "draft_num": {
+            "type": "integer",
+            "format": "int64",
+            "description": "Deprecated"
+          },
+          "duration": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "end_at": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "feed": {
+            "type": "boolean",
+            "description": "Present in feed (main screen)"
+          },
+          "freq": {
+            "$ref": "#/components/schemas/Freq"
+          },
+          "gentime": {
+            "type": "integer",
+            "format": "int64",
+            "description": "Chat fields related to concrete participant) version"
+          },
+          "hidden": {
+            "type": "boolean",
+            "description": "Hidden chat"
+          },
+          "icons": {
+            "$ref": "#/components/schemas/IconData",
+            "description": "Icons info"
+          },
+          "id": {
+            "type": "string"
+          },
+          "importance": {
+            "type": "integer",
+            "description": "Task importance, if available in team"
+          },
+          "is_archive": {
+            "type": "boolean"
+          },
+          "is_outside": {
+            "type": "boolean"
+          },
+          "is_required": {
+            "type": "boolean"
+          },
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/TaskItem"
+            },
+            "description": "Checklist items. Task only"
+          },
+          "ivcs_info": {
+            "$ref": "#/components/schemas/IVCSInfo"
+          },
+          "jid": {
+            "$ref": "#/components/schemas/JID",
+            "description": "Group/Task/Contact id"
+          },
+          "last_activity": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Date of the last message sent even if it was deleted"
+          },
+          "last_message": {
+            "$ref": "#/components/schemas/Message",
+            "description": "Last message object"
+          },
+          "last_read_message_id": {
+            "type": "string",
+            "description": "Last read message id, if any"
+          },
+          "linked_messages": {
+            "type": "array",
+            "items": {
+              "type": "object"
+            },
+            "description": "Used for \"Create task from messages...\""
+          },
+          "links": {
+            "$ref": "#/components/schemas/MessageLinks",
+            "description": "Links in description"
+          },
+          "markup": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/MarkupEntity"
+            },
+            "description": "Markup entities for description field. Experimental"
+          },
+          "meeting_duration": {
+            "type": "integer",
+            "format": "int32",
+            "description": "Meeting duration"
+          },
+          "meeting_freq": {
+            "type": "boolean",
+            "description": "Meeting has frequency"
+          },
+          "meeting_members": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/MeetingMember"
+            }
+          },
+          "meeting_recipient_status": {
+            "$ref": "#/components/schemas/MeetingRecipientStatus"
+          },
+          "meeting_start_at": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Start date of meeting chat"
+          },
+          "members": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/GroupMembership"
+            },
+            "description": "Group chat members"
+          },
+          "notifications_enabled": {
+            "type": "boolean",
+            "description": "Push notifications enabled"
+          },
+          "num": {
+            "type": "integer",
+            "description": "Task number in this team"
+          },
+          "num_checked_items": {
+            "type": "integer",
+            "description": "Checked items in checklist. Tasks only"
+          },
+          "num_importants": {
+            "type": "integer",
+            "description": "Number of important messages"
+          },
+          "num_items": {
+            "type": "integer",
+            "description": "Items in checklist. Tasks only"
+          },
+          "num_members": {
+            "type": "integer",
+            "description": "Non-archive participants number"
+          },
+          "num_unread": {
+            "type": "integer",
+            "description": "Unread counter"
+          },
+          "num_unread_notices": {
+            "type": "integer",
+            "description": "Mentions (@) counter"
+          },
+          "observers": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/JID"
+            },
+            "description": "Task followers id's. TODO: rename to \"followers\""
+          },
+          "owner": {
+            "$ref": "#/components/schemas/JID",
+            "description": "Task creator"
+          },
+          "owner_contact_uuid": {
+            "$ref": "#/components/schemas/JID"
+          },
+          "owner_user_uuid": {
+            "type": "string"
+          },
+          "parents": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Subtask"
+            },
+            "description": "Parent tasks"
+          },
+          "personal_account_id": {
+            "type": "string"
+          },
+          "pinned": {
+            "type": "boolean",
+            "description": "Is chat pinned on top"
+          },
+          "pinned_message": {
+            "$ref": "#/components/schemas/Message",
+            "description": "Pinned message for this chat"
+          },
+          "pinned_sort_ordering": {
+            "type": "integer",
+            "description": "Sort ordering for pinned chat"
+          },
+          "public": {
+            "type": "boolean",
+            "description": "Can other team member see this task/group chat"
+          },
+          "readonly_for_members": {
+            "type": "boolean",
+            "description": "Readonly for non-admins group chat (Like Channels in Telegram but switchable)"
+          },
+          "section": {
+            "type": "string",
+            "description": "Project / section id, if any"
+          },
+          "spent_time": {
+            "type": "integer",
+            "description": "Task spent time, number"
+          },
+          "start_at": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "status": {
+            "$ref": "#/components/schemas/GroupStatus",
+            "description": "My status in group chat"
+          },
+          "tabs": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/TaskTabKey"
+            },
+            "description": "Tab names"
+          },
+          "tags": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Task tags list, if any"
+          },
+          "task_status": {
+            "type": "string",
+            "description": "Task status. May be custom"
+          },
+          "team_uuid": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string",
+            "description": "Task title. Generated from number and description"
+          },
+          "uploads": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Upload"
+            },
+            "description": "Upload uids for request, upload objects for response"
+          },
+          "urgency": {
+            "type": "integer",
+            "description": "Task urgency, if available in team"
+          },
+          "vcs_enabled": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "id",
+          "start_at",
+          "end_at",
+          "duration",
+          "meeting_recipient_status",
+          "jid",
+          "chat_type",
+          "gentime",
+          "created",
+          "display_name",
+          "icons"
+        ]
+      },
+      "MeetingMember": {
+        "type": "object",
+        "properties": {
+          "can_change_presence": {
+            "type": "boolean"
+          },
+          "can_change_status": {
+            "type": "boolean"
+          },
+          "can_remove": {
+            "type": "boolean"
+          },
+          "chat_uuid": {
+            "type": "string"
+          },
+          "contact": {
+            "$ref": "#/components/schemas/Contact"
+          },
+          "meeting_id": {
+            "type": "string"
+          },
+          "presence": {
+            "$ref": "#/components/schemas/MeetingPresenceStatus"
+          },
+          "status": {
+            "$ref": "#/components/schemas/MeetingMemberStatus"
+          }
+        },
+        "required": [
+          "meeting_id",
+          "chat_uuid",
+          "contact",
+          "presence",
+          "status"
+        ]
+      },
+      "MeetingMemberStatus": {
+        "type": "string"
+      },
+      "MeetingNewGuest": {
+        "type": "object",
+        "properties": {
+          "full_name": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "full_name"
+        ],
+        "description": "Guest Invitation Form"
+      },
+      "MeetingPresenceStatus": {
+        "type": "string"
+      },
+      "MeetingRecipientStatus": {
+        "type": "string"
+      },
+      "MeetingRepeatabilityType": {
+        "type": "string"
+      },
+      "MeetingsCountResponse": {
+        "type": "object",
+        "properties": {
+          "count_cells": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "count_meetings": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "required": [
+          "count_cells",
+          "count_meetings"
+        ]
+      },
+      "MeetingsCreateRequest": {
+        "type": "object",
+        "properties": {
+          "description": {
+            "type": "string"
+          },
+          "duration": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "freq": {
+            "$ref": "#/components/schemas/Freq"
+          },
+          "is_outside": {
+            "type": "boolean"
+          },
+          "is_public": {
+            "type": "boolean"
+          },
+          "members": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/MeetingsMemberCreateParams"
+            }
+          },
+          "owner_contact_uuid": {
+            "$ref": "#/components/schemas/JID"
+          },
+          "start_at": {
+            "type": "string"
+          },
+          "team_uuid": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "vcs_enabled": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "owner_contact_uuid",
+          "team_uuid",
+          "start_at",
+          "duration",
+          "members"
+        ]
+      },
+      "MeetingsDatesResponse": {
+        "type": "object",
+        "properties": {
+          "dates": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "required": [
+          "dates"
+        ]
+      },
+      "MeetingsDeleteRequestParams": {
+        "type": "object",
+        "properties": {
+          "date": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "team_uuid": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "team_uuid"
+        ]
+      },
+      "MeetingsGetFrequencyDescriptionParams": {
+        "type": "object",
+        "properties": {
+          "freq_days": {
+            "type": "string"
+          },
+          "frequency": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "repeatability_type": {
+            "$ref": "#/components/schemas/MeetingRepeatabilityType"
+          }
+        },
+        "required": [
+          "frequency",
+          "repeatability_type"
+        ]
+      },
+      "MeetingsGetRequest": {
+        "type": "object",
+        "properties": {
+          "date_from": {
+            "type": "string"
+          },
+          "date_to": {
+            "type": "string"
+          },
+          "is_archive": {
+            "type": "boolean"
+          },
+          "is_freq": {
+            "type": "boolean"
+          },
+          "is_outside": {
+            "type": "boolean"
+          },
+          "is_public": {
+            "type": "boolean"
+          },
+          "is_required": {
+            "type": "boolean"
+          },
+          "limit": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "members_jids": {
+            "type": "string"
+          },
+          "offset": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "team_uuid": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "team_uuid",
+          "date_from",
+          "date_to"
+        ]
+      },
+      "MeetingsMemberCreateParams": {
+        "type": "object",
+        "properties": {
+          "jid": {
+            "$ref": "#/components/schemas/JID"
+          },
+          "status": {
+            "$ref": "#/components/schemas/MeetingMemberStatus"
+          }
+        },
+        "required": [
+          "jid"
+        ]
+      },
+      "MeetingsMembersBatchDeleteRequestParams": {
+        "type": "object",
+        "properties": {
+          "members_jids": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/JID"
+            }
+          },
+          "team_uuid": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "team_uuid",
+          "members_jids"
+        ]
+      },
+      "MeetingsMembersCreateRequest": {
+        "type": "object",
+        "properties": {
+          "members": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/MeetingsMemberCreateParams"
+            }
+          },
+          "team_uuid": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "members",
+          "team_uuid"
+        ]
+      },
+      "MeetingsMembersCreateResponse": {
+        "type": "object",
+        "properties": {
+          "errors": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "members": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/MeetingMember"
+            }
+          }
+        }
+      },
+      "MeetingsMembersDeleteRequestParams": {
+        "type": "object",
+        "properties": {
+          "team_uuid": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "team_uuid"
+        ]
+      },
+      "MeetingsMembersGetRequestParams": {
+        "type": "object",
+        "properties": {
+          "limit": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "meeting_id": {
+            "type": "string"
+          },
+          "offset": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "presence": {
+            "$ref": "#/components/schemas/MeetingPresenceStatus"
+          },
+          "status": {
+            "$ref": "#/components/schemas/MeetingMemberStatus"
+          },
+          "team_uuid": {
+            "type": "string"
+          },
+          "uuid_sections": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "required": [
+          "meeting_id",
+          "team_uuid"
+        ]
+      },
+      "MeetingsMembersResponse": {
+        "type": "object",
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/MeetingMember"
+            }
+          },
+          "limit": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "offset": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "total": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "required": [
+          "items"
+        ]
+      },
+      "MeetingsMembersUpdateRequest": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "$ref": "#/components/schemas/MeetingMemberStatus"
+          },
+          "team_uuid": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "team_uuid"
+        ]
+      },
+      "MeetingsResponse": {
+        "type": "object",
+        "properties": {
+          "count": {
+            "type": "integer"
+          },
+          "limit": {
+            "type": "integer"
+          },
+          "objects": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Meeting"
+            }
+          },
+          "offset": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "objects",
+          "count",
+          "limit",
+          "offset"
+        ]
+      },
+      "MeetingsUpdateCellRequest": {
+        "type": "object",
+        "properties": {
+          "cell_start_new_date": {
+            "type": "string"
+          },
+          "cell_start_old_date": {
+            "type": "string"
+          },
+          "duration": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "meeting_id": {
+            "type": "string"
+          },
+          "team_uuid": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "meeting_id",
+          "team_uuid",
+          "duration",
+          "cell_start_old_date",
+          "cell_start_new_date"
+        ]
+      },
+      "MeetingsUpdateRequest": {
+        "type": "object",
+        "properties": {
+          "add_members": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/MeetingsMemberCreateParams"
+            }
+          },
+          "counters_enabled": {
+            "type": "boolean"
+          },
+          "description": {
+            "type": "string"
+          },
+          "duration": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "freq": {
+            "$ref": "#/components/schemas/Freq"
+          },
+          "is_outside": {
+            "type": "boolean"
+          },
+          "is_public": {
+            "type": "boolean"
+          },
+          "meeting_id": {
+            "type": "string"
+          },
+          "notifications_enabled": {
+            "type": "boolean"
+          },
+          "remove_members": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/JID"
+            }
+          },
+          "start_at": {
+            "type": "string"
+          },
+          "team_uuid": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "vcs_enabled": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "meeting_id",
+          "team_uuid"
+        ]
       },
       "Message": {
         "type": "object",
@@ -5025,6 +6921,10 @@
         ],
         "description": "Message reaction detail"
       },
+      "MessengerType": {
+        "type": "string",
+        "description": "MessengerType type of messenger. Ex. Telegram, WhatsApp etc"
+      },
       "MyReactions": {
         "type": "object",
         "properties": {
@@ -5208,6 +7108,33 @@
         ],
         "description": "Paginated contacts"
       },
+      "PaginatedMeetings": {
+        "type": "object",
+        "properties": {
+          "count": {
+            "type": "integer"
+          },
+          "limit": {
+            "type": "integer"
+          },
+          "objects": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Meeting"
+            }
+          },
+          "offset": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "objects",
+          "count",
+          "limit",
+          "offset"
+        ],
+        "description": "Paginated meetings"
+      },
       "PaginatedMessages": {
         "type": "object",
         "properties": {
@@ -5262,6 +7189,155 @@
         ],
         "description": "Paginated UploadShortMessage"
       },
+      "ParseErrCode": {},
+      "ParseState": {
+        "type": "string",
+        "description": "ParseState parse status"
+      },
+      "ParserGenerateChatsResponse": {
+        "type": "object",
+        "properties": {
+          "action_type": {
+            "$ref": "#/components/schemas/ActionType",
+            "description": "ActionType must be generate_chat"
+          },
+          "archive_name": {
+            "type": "string",
+            "description": "ArchiveName name of archive"
+          },
+          "processing_action": {
+            "type": "string",
+            "description": "ProcessingAction action for background notifications about generation of chats and messages"
+          }
+        },
+        "required": [
+          "processing_action",
+          "action_type",
+          "archive_name"
+        ],
+        "description": "ParserGenerateChatsResponse .."
+      },
+      "ParserGetMappedUsersResponse": {
+        "type": "object",
+        "properties": {
+          "chat_name": {
+            "type": "string",
+            "description": "ChatName .."
+          },
+          "users": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/MappedUser"
+            },
+            "description": "Users .."
+          }
+        },
+        "required": [
+          "users",
+          "chat_name"
+        ],
+        "description": "ParserGetMappedUsersResponse .."
+      },
+      "ParserGetStateResponse": {
+        "type": "object",
+        "properties": {
+          "action": {
+            "type": "string",
+            "description": "Action name"
+          },
+          "action_type": {
+            "$ref": "#/components/schemas/ActionType",
+            "description": "ActionType. Ex: [archive_unpacking || generate_chats]"
+          },
+          "archive_name": {
+            "type": "string",
+            "description": "ArchiveName name of archive"
+          },
+          "body": {
+            "type": "string",
+            "description": "Localized Body"
+          },
+          "has_error": {
+            "type": "boolean",
+            "description": "Has error"
+          },
+          "message": {
+            "type": "string",
+            "description": "Localized Message"
+          },
+          "progress": {
+            "type": "integer",
+            "description": "Progress of archive unpacking"
+          },
+          "state": {
+            "$ref": "#/components/schemas/ParseState",
+            "description": "State of import chats"
+          }
+        },
+        "required": [
+          "state",
+          "archive_name",
+          "has_error"
+        ],
+        "description": "ParserGetStateResponse response structure for method GetArchiveState"
+      },
+      "ParserMapUsersRequest": {
+        "type": "object",
+        "properties": {
+          "users": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/MappedUser"
+            },
+            "description": "Users .."
+          }
+        },
+        "required": [
+          "users"
+        ],
+        "description": "ParserMapUsersRequest .."
+      },
+      "ParserMapUsersResponse": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean",
+            "description": "Success result"
+          }
+        },
+        "required": [
+          "success"
+        ],
+        "description": "ParserMapUsersResponse .."
+      },
+      "ParserUploadArchiveResponse": {
+        "type": "object",
+        "properties": {
+          "action_type": {
+            "$ref": "#/components/schemas/ActionType",
+            "description": "ActionType must be archive_unpacking"
+          },
+          "archive_name": {
+            "type": "string",
+            "description": "ArchiveName name of archive"
+          },
+          "processing_action": {
+            "type": "string",
+            "description": "ProcessingAction action for background notifications about archive unpacking"
+          },
+          "success": {
+            "type": "boolean",
+            "description": "Success result"
+          }
+        },
+        "required": [
+          "success",
+          "processing_action",
+          "action_type",
+          "archive_name"
+        ],
+        "description": "ParserUploadArchiveResponse response structure for method UploadArchive"
+      },
       "Payment": {
         "type": "object",
         "properties": {
@@ -5305,92 +7381,95 @@
       "PersonalAccountBilling": {
         "type": "object",
         "properties": {
-          "discount_amount": {
-            "type": "integer",
-            "format": "int32",
-            "description": "Amount of Discount on personal account"
-          },
-          "discount_id": {
+          "block_date": {
             "type": "string",
-            "description": "ID Discount on personal account"
+            "description": "Account blocking date"
           },
-          "free_workplaces": {
-            "type": "integer",
-            "format": "int32",
+          "empty_workplace_count": {
+            "$ref": "#/components/schemas/uint32",
+            "description": "Count of empty workplaces on personal account"
+          },
+          "free_workplace_count": {
+            "$ref": "#/components/schemas/uint32",
             "description": "Count of free workplaces on personal account"
           },
-          "full_name": {
-            "type": "string",
-            "description": "Full name of owner personal account"
+          "is_blocked": {
+            "type": "boolean",
+            "description": "Is the account blocked"
+          },
+          "is_suspended": {
+            "type": "boolean",
+            "description": "Is the account suspended"
           },
           "next_billing_date": {
             "type": "string",
             "description": "Date of next debiting funds"
           },
-          "owner_uuid": {
-            "type": "string",
+          "occupied_workplace_count": {
+            "$ref": "#/components/schemas/uint32",
+            "description": "Count of occupied workplaces on personal account"
+          },
+          "owner": {
+            "$ref": "#/components/schemas/Contact",
+            "description": "Owner of this personal account"
+          },
+          "owner_id": {
+            "$ref": "#/components/schemas/uint64",
             "description": "ID User who owns this personal account"
           },
-          "paid_workplaces": {
-            "type": "integer",
-            "format": "int32",
+          "owner_uuid": {
+            "type": "string",
+            "description": "UUID of User who owns this personal account"
+          },
+          "paid_workplace_count": {
+            "$ref": "#/components/schemas/uint32",
             "description": "Count of paid workplaces on personal account"
           },
           "personal_account_id": {
-            "type": "string",
+            "$ref": "#/components/schemas/uint64",
             "description": "PersonalAccountBilling ID"
-          },
-          "phone": {
-            "type": "string",
-            "description": "Phone number of owner account"
           },
           "status": {
             "$ref": "#/components/schemas/PersonalAccountStatus",
             "description": "Status of personal account"
           },
-          "tariff_id": {
+          "suspend_date": {
             "type": "string",
-            "description": "ID Tariff on this personal account"
+            "description": "Account suspending date"
           },
-          "tariff_name": {
-            "type": "string",
-            "description": "Name Tariff on this personal account"
+          "tariff": {
+            "$ref": "#/components/schemas/TariffBilling",
+            "description": "Tariff on this personal account"
           },
-          "team_count": {
-            "type": "integer",
-            "format": "int32",
+          "teams_count": {
+            "$ref": "#/components/schemas/uint32",
             "description": "Count of teams on personal account"
           },
-          "users_count": {
-            "type": "integer",
-            "format": "int32",
-            "description": "Count of user on personal account"
-          },
           "workplace_count": {
-            "type": "integer",
-            "format": "int32",
+            "$ref": "#/components/schemas/uint32",
             "description": "Count of workplaces on personal account"
           }
         },
         "required": [
+          "personal_account_id",
+          "owner_id",
           "owner_uuid",
-          "tariff_id",
-          "tariff_name",
-          "discount_id",
-          "discount_amount",
-          "status",
-          "next_billing_date",
-          "team_count",
+          "teams_count",
           "workplace_count",
-          "users_count",
-          "free_workplaces",
-          "paid_workplaces"
+          "empty_workplace_count",
+          "occupied_workplace_count",
+          "free_workplace_count",
+          "paid_workplace_count",
+          "is_blocked",
+          "is_suspended",
+          "status",
+          "tariff"
         ],
         "description": "PersonalAccountBilling struct of billing api"
       },
       "PersonalAccountStatus": {
         "type": "string",
-        "description": "PersonalAccountStatus is status of personal account"
+        "description": "PersonalAccountStatus account status"
       },
       "PushDevice": {
         "type": "object",
@@ -5559,6 +7638,223 @@
         ],
         "description": "Server response"
       },
+      "ResponsiblePerson": {
+        "type": "object",
+        "properties": {
+          "counterparty_id": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "first_name": {
+            "type": "string"
+          },
+          "id": {
+            "type": "string"
+          },
+          "last_name": {
+            "type": "string"
+          },
+          "patronymic": {
+            "type": "string"
+          },
+          "phone": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "counterparty_id",
+          "first_name",
+          "last_name",
+          "phone",
+          "email"
+        ]
+      },
+      "ResponsiblePersonCreateRequest": {
+        "type": "object",
+        "properties": {
+          "counterparty_id": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "first_name": {
+            "type": "string"
+          },
+          "last_name": {
+            "type": "string"
+          },
+          "patronymic": {
+            "type": "string"
+          },
+          "phone": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "counterparty_id",
+          "first_name",
+          "last_name",
+          "phone",
+          "email"
+        ]
+      },
+      "ResponsiblePersonCreateResponse": {
+        "type": "object",
+        "properties": {
+          "counterparty_id": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "first_name": {
+            "type": "string"
+          },
+          "id": {
+            "type": "string"
+          },
+          "last_name": {
+            "type": "string"
+          },
+          "patronymic": {
+            "type": "string"
+          },
+          "phone": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "counterparty_id",
+          "first_name",
+          "last_name",
+          "phone",
+          "email"
+        ]
+      },
+      "ResponsiblePersonDeleteRequest": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id"
+        ]
+      },
+      "ResponsiblePersonGetListRequest": {
+        "type": "object",
+        "properties": {
+          "counterparty_id": {
+            "type": "string"
+          },
+          "limit": {
+            "$ref": "#/components/schemas/uint32"
+          },
+          "offset": {
+            "$ref": "#/components/schemas/uint32"
+          }
+        }
+      },
+      "ResponsiblePersonGetRequest": {
+        "type": "object",
+        "properties": {
+          "responsible_person_ids": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "responsible_person_ids"
+        ]
+      },
+      "ResponsiblePersonGetResponse": {
+        "type": "object",
+        "properties": {
+          "responsible_person_list": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ResponsiblePerson"
+            }
+          }
+        },
+        "required": [
+          "responsible_person_list"
+        ]
+      },
+      "ResponsiblePersonUpdateRequest": {
+        "type": "object",
+        "properties": {
+          "counterparty_id": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "first_name": {
+            "type": "string"
+          },
+          "id": {
+            "type": "string"
+          },
+          "last_name": {
+            "type": "string"
+          },
+          "patronymic": {
+            "type": "string"
+          },
+          "phone": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "counterparty_id",
+          "first_name",
+          "last_name",
+          "patronymic",
+          "phone",
+          "email"
+        ]
+      },
+      "ResponsiblePersonUpdateResponse": {
+        "type": "object",
+        "properties": {
+          "counterparty_id": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "first_name": {
+            "type": "string"
+          },
+          "id": {
+            "type": "string"
+          },
+          "last_name": {
+            "type": "string"
+          },
+          "patronymic": {
+            "type": "string"
+          },
+          "phone": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "counterparty_id",
+          "first_name",
+          "last_name",
+          "phone",
+          "email"
+        ]
+      },
       "Section": {
         "type": "object",
         "properties": {
@@ -5595,6 +7891,25 @@
           "gentime"
         ],
         "description": "Task project or contact section"
+      },
+      "ServerAccountUpdated": {
+        "type": "object",
+        "properties": {
+          "confirm_id": {
+            "type": "string"
+          },
+          "event": {
+            "type": "string"
+          },
+          "params": {
+            "$ref": "#/components/schemas/serverAccountUpdatedParams"
+          }
+        },
+        "required": [
+          "params",
+          "event"
+        ],
+        "description": "Personal Account created or updated"
       },
       "ServerCallAnswer": {
         "type": "object",
@@ -5747,6 +8062,25 @@
           "event"
         ],
         "description": "Call restarted"
+      },
+      "ServerCallScreenShare": {
+        "type": "object",
+        "properties": {
+          "confirm_id": {
+            "type": "string"
+          },
+          "event": {
+            "type": "string"
+          },
+          "params": {
+            "$ref": "#/components/schemas/serverCallScreenShareParams"
+          }
+        },
+        "required": [
+          "params",
+          "event"
+        ],
+        "description": "ServerCallScreenShare screen share event"
       },
       "ServerCallSdp": {
         "type": "object",
@@ -6012,6 +8346,63 @@
           "event"
         ],
         "description": "Login from other device"
+      },
+      "ServerMeetingCellUpdated": {
+        "type": "object",
+        "properties": {
+          "confirm_id": {
+            "type": "string"
+          },
+          "event": {
+            "type": "string"
+          },
+          "params": {
+            "$ref": "#/components/schemas/serverMeetingCellUpdatedParams"
+          }
+        },
+        "required": [
+          "params",
+          "event"
+        ],
+        "description": "Meeting Cell updated"
+      },
+      "ServerMeetingDeleted": {
+        "type": "object",
+        "properties": {
+          "confirm_id": {
+            "type": "string"
+          },
+          "event": {
+            "type": "string"
+          },
+          "params": {
+            "$ref": "#/components/schemas/serverMeetingDeletedParams"
+          }
+        },
+        "required": [
+          "params",
+          "event"
+        ],
+        "description": "Meeting deleted"
+      },
+      "ServerMeetingUpdated": {
+        "type": "object",
+        "properties": {
+          "confirm_id": {
+            "type": "string"
+          },
+          "event": {
+            "type": "string"
+          },
+          "params": {
+            "$ref": "#/components/schemas/serverMeetingUpdatedParams"
+          }
+        },
+        "required": [
+          "params",
+          "event"
+        ],
+        "description": "Meeting created or updated"
       },
       "ServerMessagePush": {
         "type": "object",
@@ -6391,6 +8782,25 @@
         ],
         "description": "Something went wrong with client message"
       },
+      "ServerWorkplaceUpdated": {
+        "type": "object",
+        "properties": {
+          "confirm_id": {
+            "type": "string"
+          },
+          "event": {
+            "type": "string"
+          },
+          "params": {
+            "$ref": "#/components/schemas/serverWorkplaceUpdatedParams"
+          }
+        },
+        "required": [
+          "params",
+          "event"
+        ],
+        "description": "ServerWorkplaceUpdated Workplace created or updated"
+      },
       "Session": {
         "type": "object",
         "properties": {
@@ -6433,18 +8843,6 @@
           "created"
         ],
         "description": "Websocket session"
-      },
-      "SetTariffAsDefaultResponse": {
-        "type": "object",
-        "properties": {
-          "success": {
-            "type": "boolean"
-          }
-        },
-        "required": [
-          "success"
-        ],
-        "description": "Response from setting the tariff as default"
       },
       "SharpLink": {
         "type": "object",
@@ -6689,9 +9087,26 @@
             "$ref": "#/components/schemas/JID",
             "description": "Assignee contact id. Tasks only"
           },
+          "complexity": {
+            "type": "integer",
+            "description": "Subtask complexity, number"
+          },
+          "deadline": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Subtask deadline in iso format, if any"
+          },
+          "deadline_expired": {
+            "type": "boolean",
+            "description": "Is subtask deadline expired"
+          },
           "display_name": {
             "type": "string",
             "description": "Title"
+          },
+          "importance": {
+            "type": "integer",
+            "description": "Subtask importance, if available in team"
           },
           "jid": {
             "$ref": "#/components/schemas/JID",
@@ -6734,6 +9149,44 @@
           "success"
         ],
         "description": "SuspendPersonalAccountResponse response on suspend active personal account"
+      },
+      "SwipeColors": {
+        "type": "object",
+        "properties": {
+          "call": {
+            "$ref": "#/components/schemas/RGBColor",
+            "description": "Call color"
+          },
+          "end_call": {
+            "$ref": "#/components/schemas/RGBColor",
+            "description": "EndCall"
+          },
+          "hide": {
+            "$ref": "#/components/schemas/RGBColor",
+            "description": "Hide color"
+          },
+          "message": {
+            "$ref": "#/components/schemas/RGBColor",
+            "description": "Message color"
+          },
+          "notification": {
+            "$ref": "#/components/schemas/RGBColor",
+            "description": "Notification color"
+          },
+          "pin": {
+            "$ref": "#/components/schemas/RGBColor",
+            "description": "Pin color"
+          }
+        },
+        "required": [
+          "notification",
+          "call",
+          "end_call",
+          "hide",
+          "pin",
+          "message"
+        ],
+        "description": "SwipeColors swipe colors for app"
       },
       "SwitcherColors": {
         "type": "object",
@@ -6819,52 +9272,73 @@
       "TariffBilling": {
         "type": "object",
         "properties": {
+          "benefit": {
+            "type": "string",
+            "description": "Benefit of tariff"
+          },
           "close_date": {
             "type": "string",
             "description": "Date of closing tariff"
           },
           "cost_workplace": {
-            "type": "string",
+            "$ref": "#/components/schemas/float64",
             "description": "Cost of one workplace"
           },
           "currency": {
             "$ref": "#/components/schemas/Currency",
             "description": "Currency of tariff"
           },
-          "disk_space_quota_mb": {
+          "description": {
             "type": "string",
+            "description": "Description of tariff"
+          },
+          "disk_space_quota_mb": {
+            "$ref": "#/components/schemas/float64",
             "description": "Disk space limit per user"
           },
-          "free_workplaces": {
-            "type": "integer",
-            "format": "int32",
+          "free_workplace_count": {
+            "$ref": "#/components/schemas/uint32",
             "description": "Count of free workspaces"
           },
-          "is_billing_free": {
-            "type": "boolean",
-            "description": "Flag of availability of free seats when exceeding FreeWorkplace"
+          "id": {
+            "type": "string",
+            "description": "Tariff id"
           },
-          "is_billing_full_time": {
-            "type": "boolean",
-            "description": "Flag of accounting without looking at the number of days before the billing period"
-          },
-          "is_default_tariff": {
+          "is_default": {
             "type": "boolean",
             "description": "Default tariff flag that is set when registering an account"
           },
-          "is_recalc_change_tariff": {
+          "is_free": {
             "type": "boolean",
-            "description": "Flag for accounting for unspent days when switching to a new tariff"
+            "description": "Flag of availability of free seats when exceeding FreeWorkplace"
+          },
+          "is_public": {
+            "type": "boolean",
+            "description": "Flag of publicity"
           },
           "max_video_user": {
-            "type": "integer",
-            "format": "int32",
+            "$ref": "#/components/schemas/uint32",
             "description": "Maximum count of users in video conference"
           },
           "max_voice_user": {
-            "type": "integer",
-            "format": "int32",
+            "$ref": "#/components/schemas/uint32",
             "description": "Maximum count of users in voice conference"
+          },
+          "max_workplace_count": {
+            "$ref": "#/components/schemas/uint32",
+            "description": "Count of maximum workspaces on tariff"
+          },
+          "min_workplace_count": {
+            "$ref": "#/components/schemas/uint32",
+            "description": "Count of minimum workspaces on tariff"
+          },
+          "name": {
+            "type": "string",
+            "description": "Name of tariff"
+          },
+          "nomenclature_name": {
+            "type": "string",
+            "description": "Nomenclature name of tariff"
           },
           "open_date": {
             "type": "string",
@@ -6872,38 +9346,49 @@
             "description": "Date of opening tariff"
           },
           "period_days": {
-            "type": "integer",
-            "format": "int32",
+            "$ref": "#/components/schemas/uint32",
             "description": "Number of paid days"
+          },
+          "priority": {
+            "$ref": "#/components/schemas/uint32",
+            "description": "Priority of tariff"
           },
           "status": {
             "$ref": "#/components/schemas/TariffStatus",
             "description": "Status of tariff"
           },
-          "tariff_id": {
-            "type": "string",
-            "description": "Tariff id"
+          "step_increasing_workplaces": {
+            "$ref": "#/components/schemas/uint32",
+            "description": "Minimum step of change count workspaces on tariff"
           },
-          "tariff_name": {
-            "type": "string",
-            "description": "Name of tariff"
+          "video_call_bitrate": {
+            "$ref": "#/components/schemas/uint32",
+            "description": "Bitrate of video in video co"
+          },
+          "video_sharing_bitrate": {
+            "$ref": "#/components/schemas/uint32",
+            "description": "Bitrate of video in video sharing"
           }
         },
         "required": [
-          "cost_workplace",
+          "id",
+          "name",
+          "nomenclature_name",
+          "description",
           "currency",
+          "cost_workplace",
+          "free_workplace_count",
+          "step_increasing_workplaces",
           "disk_space_quota_mb",
-          "free_workplaces",
-          "is_billing_free",
-          "is_billing_full_time",
-          "is_default_tariff",
-          "is_recalc_change_tariff",
+          "period_days",
           "max_voice_user",
           "max_video_user",
-          "period_days",
-          "status",
-          "tariff_id",
-          "tariff_name"
+          "video_call_bitrate",
+          "video_sharing_bitrate",
+          "is_free",
+          "is_public",
+          "is_default",
+          "status"
         ],
         "description": "Tariff struct of billing API"
       },
@@ -7286,6 +9771,10 @@
       "Team": {
         "type": "object",
         "properties": {
+          "account_status": {
+            "$ref": "#/components/schemas/PersonalAccountStatus",
+            "description": "Personal account status for current team"
+          },
           "available_tariffs": {
             "type": "array",
             "items": {
@@ -7355,6 +9844,14 @@
           "need_confirmation": {
             "type": "boolean",
             "description": "Need confirmation after invite to this team"
+          },
+          "notebot": {
+            "$ref": "#/components/schemas/JID",
+            "description": "Сurrent team favorites bot, jid of chat"
+          },
+          "owner": {
+            "$ref": "#/components/schemas/Contact",
+            "description": "Team owner"
           },
           "pinned": {
             "type": "boolean",
@@ -7440,7 +9937,8 @@
           "last_active",
           "need_confirmation",
           "user_fields",
-          "me"
+          "me",
+          "account_status"
         ],
         "description": "Team"
       },
@@ -7448,9 +9946,6 @@
         "type": "object",
         "properties": {
           "delete_date": {
-            "type": "string"
-          },
-          "personal_account_id": {
             "type": "string"
           },
           "team_uuid": {
@@ -7751,6 +10246,11 @@
             "$ref": "#/components/schemas/RGBColor",
             "description": "Attention light color for app"
           },
+          "avatar": {
+            "$ref": "#/components/schemas/AvatarColors",
+            "nullable": true,
+            "description": "Avatar colors for app"
+          },
           "back": {
             "$ref": "#/components/schemas/RGBColor",
             "description": "Back light color for app"
@@ -7766,6 +10266,11 @@
           "background": {
             "$ref": "#/components/schemas/RGBColor",
             "description": "Background color for app"
+          },
+          "bg": {
+            "$ref": "#/components/schemas/Bg",
+            "nullable": true,
+            "description": "Bg colors for app"
           },
           "brand": {
             "$ref": "#/components/schemas/RGBColor",
@@ -7783,6 +10288,11 @@
             "$ref": "#/components/schemas/ButtonColors",
             "nullable": true,
             "description": "Button colors for app"
+          },
+          "call": {
+            "$ref": "#/components/schemas/CallColors",
+            "nullable": true,
+            "description": "Call colors for app"
           },
           "chat_input_background": {
             "$ref": "#/components/schemas/RGBColor",
@@ -7831,6 +10341,11 @@
           "success_light": {
             "$ref": "#/components/schemas/RGBColor",
             "description": "Success light color for app"
+          },
+          "swipe": {
+            "$ref": "#/components/schemas/SwipeColors",
+            "nullable": true,
+            "description": "Swipe colors for app"
           },
           "switcher": {
             "$ref": "#/components/schemas/SwitcherColors",
@@ -7927,6 +10442,52 @@
           "chats"
         ],
         "description": "Unread message counters"
+      },
+      "UpdatePersonalAccountRequest": {
+        "type": "object",
+        "properties": {
+          "full_name": {
+            "type": "string"
+          },
+          "phone": {
+            "type": "string"
+          }
+        },
+        "description": "UpdatePersonalAccountRequest request on update personal account"
+      },
+      "UpdatePersonalAccountResponse": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean"
+          }
+        },
+        "description": "UpdatePersonalAccountResponse response on update personal account"
+      },
+      "UpdateTariffRequest": {
+        "type": "object",
+        "properties": {
+          "close_date": {
+            "type": "string",
+            "description": "Date of closing tariff"
+          },
+          "is_default": {
+            "type": "boolean",
+            "description": "Default tariff flag that is set when registering an account"
+          },
+          "status": {
+            "$ref": "#/components/schemas/TariffStatus",
+            "description": "Status of tariff"
+          },
+          "tariff_id": {
+            "type": "string",
+            "description": "Tariff id"
+          }
+        },
+        "required": [
+          "tariff_id"
+        ],
+        "description": "Request to update the tariff"
       },
       "Upload": {
         "type": "object",
@@ -8174,9 +10735,37 @@
         ],
         "description": "User authentication"
       },
+      "UserInfo": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string"
+          },
+          "full_name": {
+            "type": "string"
+          },
+          "last_activity": {
+            "type": "string"
+          },
+          "phone": {
+            "type": "string"
+          },
+          "uuid": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "uuid"
+        ],
+        "description": "UserInfo user information"
+      },
       "UserWithMe": {
         "type": "object",
         "properties": {
+          "account": {
+            "$ref": "#/components/schemas/PersonalAccountBilling",
+            "description": "Personal account from billing"
+          },
           "alt_send": {
             "type": "boolean",
             "description": "Use Ctrl/Cmd + Enter instead Enter"
@@ -8303,37 +10892,48 @@
         "type": "object",
         "properties": {
           "attention": {
-            "$ref": "#/components/schemas/RGBColor"
+            "$ref": "#/components/schemas/RGBColor",
+            "description": "Attention color"
           },
           "attention_light": {
-            "$ref": "#/components/schemas/RGBColor"
+            "$ref": "#/components/schemas/RGBColor",
+            "description": "AttentionLight color"
           },
           "back_light": {
-            "$ref": "#/components/schemas/RGBColor"
+            "$ref": "#/components/schemas/RGBColor",
+            "description": "BackLight color"
           },
           "brand": {
-            "$ref": "#/components/schemas/RGBColor"
+            "$ref": "#/components/schemas/RGBColor",
+            "description": "Brand color"
           },
           "brand_dark": {
-            "$ref": "#/components/schemas/RGBColor"
+            "$ref": "#/components/schemas/RGBColor",
+            "description": "BrandDark color"
           },
           "brand_light": {
-            "$ref": "#/components/schemas/RGBColor"
+            "$ref": "#/components/schemas/RGBColor",
+            "description": "BrandLight color"
           },
           "error": {
-            "$ref": "#/components/schemas/RGBColor"
+            "$ref": "#/components/schemas/RGBColor",
+            "description": "Error color"
           },
           "error_light": {
-            "$ref": "#/components/schemas/RGBColor"
+            "$ref": "#/components/schemas/RGBColor",
+            "description": "ErrorLight color"
           },
           "fade": {
-            "$ref": "#/components/schemas/RGBColor"
+            "$ref": "#/components/schemas/RGBColor",
+            "description": "Fade color"
           },
           "success": {
-            "$ref": "#/components/schemas/RGBColor"
+            "$ref": "#/components/schemas/RGBColor",
+            "description": "Success color"
           },
           "success_light": {
-            "$ref": "#/components/schemas/RGBColor"
+            "$ref": "#/components/schemas/RGBColor",
+            "description": "SuccessLight color"
           }
         },
         "required": [
@@ -8350,6 +10950,35 @@
           "fade"
         ],
         "description": "WebBase base colors for web"
+      },
+      "WorkplaceBilling": {
+        "type": "object",
+        "properties": {
+          "user_id": {
+            "type": "string"
+          },
+          "user_uuid": {
+            "type": "string"
+          },
+          "workplace_id": {
+            "type": "string"
+          }
+        },
+        "description": "WorkplaceBilling struct of workplace on personal account"
+      },
+      "WorkplaceOptions": {
+        "type": "object",
+        "properties": {
+          "limit": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "offset": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "description": "WorkplaceOptions struct for pagination"
       },
       "clientActivityParams": {
         "type": "object",
@@ -8483,6 +11112,24 @@
           "jid"
         ],
         "description": "Params of the client.call.reject event"
+      },
+      "clientCallScreenShareParams": {
+        "type": "object",
+        "properties": {
+          "call_jid": {
+            "$ref": "#/components/schemas/JID",
+            "description": "CallJid Chat or contact id"
+          },
+          "screenshare_enabled": {
+            "type": "boolean",
+            "description": "ScreenShareEnabled enabled or disabled screen share"
+          }
+        },
+        "required": [
+          "screenshare_enabled",
+          "call_jid"
+        ],
+        "description": "Params of the client.call.screenshare event"
       },
       "clientCallSdpParams": {
         "type": "object",
@@ -8633,6 +11280,19 @@
           }
         },
         "description": "Params of the client.message.deleted event"
+      },
+      "serverAccountUpdatedParams": {
+        "type": "object",
+        "properties": {
+          "account": {
+            "$ref": "#/components/schemas/PersonalAccountBilling",
+            "description": "Personal Account info"
+          }
+        },
+        "required": [
+          "account"
+        ],
+        "description": "Params of the server.account.updated event"
       },
       "serverCallAnswerCandidate": {
         "type": "object",
@@ -8862,12 +11522,42 @@
         ],
         "description": "Params of the server.call.restart event"
       },
+      "serverCallScreenShareParams": {
+        "type": "object",
+        "properties": {
+          "actor_jid": {
+            "$ref": "#/components/schemas/JID",
+            "description": "ActorJid - contact id which enable/disable screen sharing"
+          },
+          "call_jid": {
+            "$ref": "#/components/schemas/JID",
+            "description": "CallJid - Chat or contact id"
+          },
+          "screenshare_enabled": {
+            "type": "boolean",
+            "description": "ScreenShareEnabled enabled or disabled screen share"
+          }
+        },
+        "required": [
+          "screenshare_enabled",
+          "call_jid",
+          "actor_jid"
+        ],
+        "description": "Params of the server.call.screenshare event"
+      },
       "serverCallSdpParams": {
         "type": "object",
         "properties": {
           "jid": {
             "$ref": "#/components/schemas/JID",
-            "description": "Chat or contact id"
+            "description": "Chat or contact id in singlesteam mode"
+          },
+          "jids": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/JID"
+            },
+            "description": "Jids for tracks in multistream mode"
           },
           "jsep": {
             "$ref": "#/components/schemas/JSEP",
@@ -8880,6 +11570,7 @@
         },
         "required": [
           "jid",
+          "jids",
           "uid",
           "jsep"
         ],
@@ -9103,6 +11794,94 @@
         ],
         "description": "Params of the server.login event"
       },
+      "serverMeetingCellUpdatedParams": {
+        "type": "object",
+        "properties": {
+          "duration": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "meeting_id": {
+            "type": "string",
+            "description": "Meeting Cell info"
+          },
+          "start_at_new": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "start_at_old": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "required": [
+          "meeting_id",
+          "start_at_old",
+          "start_at_new",
+          "duration"
+        ],
+        "description": "Params of the server.meetingcell.updated event"
+      },
+      "serverMeetingDeletedParams": {
+        "type": "object",
+        "properties": {
+          "meeting_id": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Meeting info"
+          }
+        },
+        "required": [
+          "meeting_id"
+        ],
+        "description": "Params of the server.meeting.deleted event"
+      },
+      "serverMeetingUpdatedParams": {
+        "type": "object",
+        "properties": {
+          "meetings": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Meeting"
+            },
+            "description": "Meeting info"
+          },
+          "team_meetings_count": {
+            "type": "integer",
+            "format": "int32",
+            "description": "Team Meetings count"
+          },
+          "team_meetings_dates": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Dates of team meetings"
+          },
+          "user_meetings_count": {
+            "type": "integer",
+            "format": "int32",
+            "description": "User Meetings count"
+          },
+          "user_meetings_dates": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Dates of user meetings"
+          }
+        },
+        "required": [
+          "meetings",
+          "team_meetings_count",
+          "user_meetings_count",
+          "team_meetings_dates",
+          "user_meetings_dates"
+        ],
+        "description": "Params of the server.meeting.updated event"
+      },
       "serverMessageReceivedParams": {
         "type": "object",
         "properties": {
@@ -9187,6 +11966,14 @@
           "action": {
             "type": "string",
             "description": "Action name"
+          },
+          "action_type": {
+            "$ref": "#/components/schemas/ActionType",
+            "description": "ActionType. Ex: [contact_import || task_import || archive_unpacking || generate_chats]"
+          },
+          "body": {
+            "type": "string",
+            "description": "Body"
           },
           "has_error": {
             "type": "boolean",
@@ -9447,6 +12234,22 @@
           "orig"
         ],
         "description": "Params of the server.warning event"
+      },
+      "serverWorkplaceUpdatedParams": {
+        "type": "object",
+        "properties": {
+          "workplaces": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/UserInfo"
+            },
+            "description": "Workplaces info"
+          }
+        },
+        "required": [
+          "workplaces"
+        ],
+        "description": "Params of the server.workplace.updated event"
       }
     },
     "securitySchemes": {
