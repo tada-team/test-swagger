@@ -12,6 +12,9 @@
   "paths": {
     "/api/v4/addr": {
       "get": {
+        "tags": [
+          "Misc"
+        ],
         "description": "Returns client address for debuging purposes.",
         "responses": {
           "200": {
@@ -40,6 +43,9 @@
     },
     "/api/v4/badge": {
       "get": {
+        "tags": [
+          "Misc"
+        ],
         "description": "Return number of unread messages.",
         "responses": {
           "200": {
@@ -65,6 +71,9 @@
     },
     "/api/v4/ping": {
       "get": {
+        "tags": [
+          "Misc"
+        ],
         "description": "Ping the server.",
         "responses": {
           "200": {
@@ -94,7 +103,7 @@
     "/api/v4/tariffs": {
       "get": {
         "tags": [
-          "billing"
+          "Billing"
         ],
         "description": "Get all tariffs.",
         "responses": {
@@ -124,6 +133,9 @@
     },
     "/api/v4/teams": {
       "get": {
+        "tags": [
+          "Teams"
+        ],
         "description": "Get the list of teams on the server.",
         "responses": {
           "200": {
@@ -150,6 +162,9 @@
         }
       },
       "post": {
+        "tags": [
+          "Teams"
+        ],
         "description": "Create new team.",
         "responses": {
           "200": {
@@ -194,6 +209,9 @@
         }
       ],
       "get": {
+        "tags": [
+          "Teams"
+        ],
         "description": "Get team info.",
         "responses": {
           "200": {
@@ -217,6 +235,9 @@
         }
       },
       "put": {
+        "tags": [
+          "Teams"
+        ],
         "description": "Update team settings.\nMust have admin rights.",
         "responses": {
           "200": {
@@ -249,6 +270,9 @@
         }
       },
       "delete": {
+        "tags": [
+          "Teams"
+        ],
         "description": "Delete the team.\nMust have admin rights.",
         "responses": {
           "200": {
@@ -284,6 +308,9 @@
         }
       ],
       "get": {
+        "tags": [
+          "Teams"
+        ],
         "description": "Get the list of chats in the team.",
         "responses": {
           "200": {
@@ -330,6 +357,9 @@
         }
       ],
       "get": {
+        "tags": [
+          "Chats"
+        ],
         "description": "Get the chat information.",
         "responses": {
           "200": {
@@ -353,6 +383,9 @@
         }
       },
       "put": {
+        "tags": [
+          "Chats"
+        ],
         "description": "Change chat settings.",
         "responses": {
           "200": {
@@ -405,6 +438,9 @@
         }
       ],
       "post": {
+        "tags": [
+          "Chats"
+        ],
         "description": "Send text message to chat.",
         "responses": {
           "200": {
@@ -463,6 +499,9 @@
         }
       ],
       "post": {
+        "tags": [
+          "Chats"
+        ],
         "description": "Edit message.",
         "responses": {
           "200": {
@@ -495,6 +534,9 @@
         }
       },
       "delete": {
+        "tags": [
+          "Chats"
+        ],
         "description": "Delete message.",
         "responses": {
           "200": {
@@ -538,6 +580,9 @@
         }
       ],
       "post": {
+        "tags": [
+          "Chats"
+        ],
         "description": "Send text message to direct chat.",
         "responses": {
           "200": {
@@ -596,6 +641,9 @@
         }
       ],
       "post": {
+        "tags": [
+          "Chats"
+        ],
         "description": "Edit message in direct chat.",
         "responses": {
           "200": {
@@ -628,6 +676,9 @@
         }
       },
       "delete": {
+        "tags": [
+          "Chats"
+        ],
         "description": "Delete message in direct chat.",
         "responses": {
           "200": {
@@ -663,6 +714,9 @@
         }
       ],
       "get": {
+        "tags": [
+          "Teams"
+        ],
         "description": "Get the list of contacts of the team.",
         "responses": {
           "200": {
@@ -709,6 +763,9 @@
         }
       ],
       "get": {
+        "tags": [
+          "Teams"
+        ],
         "description": "Get contact details.",
         "responses": {
           "200": {
@@ -732,6 +789,9 @@
         }
       },
       "post": {
+        "tags": [
+          "Teams"
+        ],
         "description": "Update contact details.",
         "responses": {
           "200": {
@@ -764,6 +824,9 @@
         }
       },
       "delete": {
+        "tags": [
+          "Teams"
+        ],
         "description": "Remove contact from the team.\nMust have admin rights.",
         "responses": {
           "200": {
@@ -799,6 +862,9 @@
         }
       ],
       "get": {
+        "tags": [
+          "Groups"
+        ],
         "description": "Get all groups in the team.",
         "responses": {
           "200": {
@@ -825,6 +891,9 @@
         }
       },
       "delete": {
+        "tags": [
+          "Groups"
+        ],
         "description": "Delete the group.",
         "responses": {
           "200": {
@@ -866,6 +935,9 @@
         }
       ],
       "get": {
+        "tags": [
+          "Groups"
+        ],
         "description": "Get the list of group members.",
         "responses": {
           "200": {
@@ -920,6 +992,9 @@
         }
       ],
       "delete": {
+        "tags": [
+          "Groups"
+        ],
         "description": "Remove member from the group.",
         "responses": {
           "200": {
@@ -955,6 +1030,9 @@
         }
       ],
       "get": {
+        "tags": [
+          "Tasks"
+        ],
         "description": "Get the list of tasks",
         "responses": {
           "200": {
@@ -1130,6 +1208,9 @@
         ]
       },
       "post": {
+        "tags": [
+          "Tasks"
+        ],
         "description": "Create new task",
         "responses": {
           "200": {
@@ -1182,6 +1263,9 @@
         }
       ],
       "get": {
+        "tags": [
+          "Tasks"
+        ],
         "description": "Get task",
         "responses": {
           "200": {
@@ -1205,6 +1289,9 @@
         }
       },
       "post": {
+        "tags": [
+          "Tasks"
+        ],
         "description": "Update task",
         "responses": {
           "200": {
@@ -1237,6 +1324,9 @@
         }
       },
       "delete": {
+        "tags": [
+          "Tasks"
+        ],
         "description": "Delete task",
         "responses": {
           "200": {
@@ -1262,6 +1352,9 @@
     },
     "/features.json": {
       "get": {
+        "tags": [
+          "Misc"
+        ],
         "description": "Get the server features information.",
         "responses": {
           "200": {
@@ -12269,6 +12362,11 @@
     }
   ],
   "tags": [
-    "billing"
+    "Misc",
+    "Groups",
+    "Tasks",
+    "Teams",
+    "Chats",
+    "Billing"
   ]
 }
