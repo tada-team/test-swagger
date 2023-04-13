@@ -93,6 +93,9 @@
     },
     "/api/v4/tariffs": {
       "get": {
+        "tags": [
+          "billing"
+        ],
         "description": "Get all tariffs.",
         "responses": {
           "200": {
