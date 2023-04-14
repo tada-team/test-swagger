@@ -2,7 +2,7 @@
   "openapi": "3.0.3",
   "info": {
     "title": "tdproto",
-    "version": ""
+    "version": "v1.51.44-17-gbd01282"
   },
   "servers": [
     {
